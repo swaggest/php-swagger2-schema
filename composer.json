@@ -3,7 +3,7 @@
     "description": "Swagger 2.0 schema PHP mappings",
     "type": "library",
     "require": {
-        "swaggest/json-schema": "^0.7.2"
+        "swaggest/json-schema": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.23",
