@@ -1,0 +1,39 @@
+{
+    "name": "swaggest/swagger2-schema",
+    "description": "Swagger 2.0 schema PHP mappings",
+    "type": "library",
+    "require": {
+        "swaggest/json-schema": "^0.7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.23",
+        "swaggest/code-builder": "dev-master#e0c5c0612fd241d2d120e5ddef91cda9edc208ee",
+        "swaggest/php-code-builder": "dev-wip-client#34c327f9992baf90385e57573d64568d58e0a247",
+        "phpunit/php-code-coverage": "2.2.4",
+        "codeclimate/php-test-reporter": "^0.4.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Viacheslav Poturaev",
+            "email": "vearutop@gmail.com"
+        }
+    ],
+    "support": {
+        "email": "vearutop@gmail.com"
+    },
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Swaggest\\SwaggerSchema\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Swaggest\\SwaggerSchema\\Tests\\": "tests/src/"
+        }
+    },
+    "scripts": {
+        "gen-swg-struct": "php ./tools/generate_swagger_structures.php"
+    }
+}

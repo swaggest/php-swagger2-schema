@@ -1,0 +1,3 @@
+[submodule "spec/http"]
+	path = spec/http
+	url = https://github.com/for-GET/know-your-http-well.git
