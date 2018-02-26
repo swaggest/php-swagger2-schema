@@ -13,6 +13,7 @@ class CustomSwaggerSchema extends SwaggerSchema
         if ($options === null) {
             $options = new Context();
         }
+        $options->applyDefaults = false;
         $options->objectItemClassMapping[Schema::className()] = CustomSchema::className();
         return parent::import($data, $options);
     }

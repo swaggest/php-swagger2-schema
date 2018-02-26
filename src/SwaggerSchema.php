@@ -7,6 +7,7 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
+use Swaggest\JsonSchema\Context;
 use Swaggest\JsonSchema\Schema as JsonBasicSchema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
@@ -70,7 +71,24 @@ class SwaggerSchema extends ClassStructure {
 	/** @var ExternalDocs information about external documentation */
 	public $externalDocs;
 
-	/**
+    /**
+     * @param mixed $data
+     * @param Context|null $options
+     * @return static
+     * @throws \Exception
+     * @throws \Swaggest\JsonSchema\Exception
+     * @throws \Swaggest\JsonSchema\InvalidValue
+     */
+	public static function import($data, Context $options = null)
+    {
+        if ($options === null) {
+            $options = new Context();
+        }
+        $options->applyDefaults = false;
+        return parent::import($data, $options);
+    }
+
+    /**
 	 * @param Properties|static $properties
 	 * @param JsonBasicSchema $ownerSchema
 	 */

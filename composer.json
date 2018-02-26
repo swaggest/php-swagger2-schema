@@ -3,10 +3,10 @@
     "description": "Swagger 2.0 schema PHP mappings",
     "type": "library",
     "require": {
-        "swaggest/json-schema": "*"
+        "swaggest/json-schema": "^0.10.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.23",
+        "phpunit/phpunit": "4.8.35",
         "swaggest/code-builder": "dev-master#e0c5c0612fd241d2d120e5ddef91cda9edc208ee",
         "swaggest/php-code-builder": "dev-wip-client#34c327f9992baf90385e57573d64568d58e0a247",
         "phpunit/php-code-coverage": "2.2.4",
@@ -35,5 +35,10 @@
     },
     "scripts": {
         "gen-swg-struct": "php ./tools/generate_swagger_structures.php"
+    },
+    "config": {
+        "platform": {
+            "php": "5.4.45"
+        }
     }
 }
