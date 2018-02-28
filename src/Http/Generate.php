@@ -30,11 +30,11 @@ class Generate
         $getInfoByCodeFunc->setThrows(PhpClass::byFQN('\Exception'));
         $getInfoByCodeFunc->setResult(PhpClass::byFQN(StatusCode::className()));
         $statusCodesClass->addMethod($getInfoByCodeFunc);
-        $getInfoByCodeBody = new PhpCode(<<<PHP
+        $getInfoByCodeBody = (new PhpCode())->addSnippet(<<<PHP
 switch (\$code) {
 
 PHP
-);
+        );
         $getInfoByCodeFunc->setBody($getInfoByCodeBody);
 
         /** @var StatusCode $item */
