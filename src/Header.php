@@ -375,27 +375,27 @@ class Header extends ClassStructure implements SchemaExporter {
 	 */
 	function exportSchema()
 	{
-		static $schema;
-		if ($schema === null) {
-		    $schema = new Schema();    
-		    $schema->type = $this->type;
-		    $schema->format = $this->format;
-		    $schema->items = $this->items;
-		    $schema->default = $this->default;
-		    $schema->maximum = $this->maximum;
-		    $schema->exclusiveMaximum = $this->exclusiveMaximum;
-		    $schema->minimum = $this->minimum;
-		    $schema->exclusiveMinimum = $this->exclusiveMinimum;
-		    $schema->maxLength = $this->maxLength;
-		    $schema->minLength = $this->minLength;
-		    $schema->pattern = $this->pattern;
-		    $schema->maxItems = $this->maxItems;
-		    $schema->minItems = $this->minItems;
-		    $schema->uniqueItems = $this->uniqueItems;
-		    $schema->enum = $this->enum;
-		    $schema->multipleOf = $this->multipleOf;
-		    $schema->description = $this->description;
-		}
+		$schema = new Schema();
+		$schema->type = $this->type;
+		$schema->format = $this->format;
+		$schema->items = $this->items;
+		$schema->default = $this->default;
+		$schema->maximum = $this->maximum;
+		$schema->exclusiveMaximum = $this->exclusiveMaximum;
+		$schema->minimum = $this->minimum;
+		$schema->exclusiveMinimum = $this->exclusiveMinimum;
+		$schema->maxLength = $this->maxLength;
+		$schema->minLength = $this->minLength;
+		$schema->pattern = $this->pattern;
+		$schema->maxItems = $this->maxItems;
+		$schema->minItems = $this->minItems;
+		$schema->uniqueItems = $this->uniqueItems;
+		$schema->enum = $this->enum;
+		$schema->multipleOf = $this->multipleOf;
+		$schema->description = $this->description;
+		$schema->setFromRef($this->getFromRef());
+		$schema->setDocumentPath($this->getDocumentPath());
+		$schema->addMeta($this, 'origin');
 		return $schema;
 	}
 }

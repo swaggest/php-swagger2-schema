@@ -595,34 +595,35 @@ class Schema extends ClassStructure implements SchemaExporter {
 	 */
 	function exportSchema()
 	{
-		static $schema;
-		if ($schema === null) {
-		    $schema = new Schema1();    
-		    $schema->format = $this->format;
-		    $schema->title = $this->title;
-		    $schema->description = $this->description;
-		    $schema->default = $this->default;
-		    $schema->multipleOf = $this->multipleOf;
-		    $schema->maximum = $this->maximum;
-		    $schema->exclusiveMaximum = $this->exclusiveMaximum;
-		    $schema->minimum = $this->minimum;
-		    $schema->exclusiveMinimum = $this->exclusiveMinimum;
-		    $schema->maxLength = $this->maxLength;
-		    $schema->minLength = $this->minLength;
-		    $schema->pattern = $this->pattern;
-		    $schema->maxItems = $this->maxItems;
-		    $schema->minItems = $this->minItems;
-		    $schema->uniqueItems = $this->uniqueItems;
-		    $schema->maxProperties = $this->maxProperties;
-		    $schema->minProperties = $this->minProperties;
-		    $schema->required = $this->required;
-		    $schema->enum = $this->enum;
-		    $schema->additionalProperties = $this->additionalProperties;
-		    $schema->type = $this->type;
-		    $schema->items = $this->items;
-		    $schema->allOf = $this->allOf;
-		    $schema->properties = $this->properties;
-		}
+		$schema = new Schema1();
+		$schema->ref = $this->ref;
+		$schema->format = $this->format;
+		$schema->title = $this->title;
+		$schema->description = $this->description;
+		$schema->default = $this->default;
+		$schema->multipleOf = $this->multipleOf;
+		$schema->maximum = $this->maximum;
+		$schema->exclusiveMaximum = $this->exclusiveMaximum;
+		$schema->minimum = $this->minimum;
+		$schema->exclusiveMinimum = $this->exclusiveMinimum;
+		$schema->maxLength = $this->maxLength;
+		$schema->minLength = $this->minLength;
+		$schema->pattern = $this->pattern;
+		$schema->maxItems = $this->maxItems;
+		$schema->minItems = $this->minItems;
+		$schema->uniqueItems = $this->uniqueItems;
+		$schema->maxProperties = $this->maxProperties;
+		$schema->minProperties = $this->minProperties;
+		$schema->required = $this->required;
+		$schema->enum = $this->enum;
+		$schema->additionalProperties = $this->additionalProperties;
+		$schema->type = $this->type;
+		$schema->items = $this->items;
+		$schema->allOf = $this->allOf;
+		$schema->properties = $this->properties;
+		$schema->setFromRef($this->getFromRef());
+		$schema->setDocumentPath($this->getDocumentPath());
+		$schema->addMeta($this, 'origin');
 		return $schema;
 	}
 }

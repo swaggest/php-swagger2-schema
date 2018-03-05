@@ -191,16 +191,16 @@ class FileSchema extends ClassStructure implements SchemaExporter {
 	 */
 	function exportSchema()
 	{
-		static $schema;
-		if ($schema === null) {
-		    $schema = new Schema();    
-		    $schema->format = $this->format;
-		    $schema->title = $this->title;
-		    $schema->description = $this->description;
-		    $schema->default = $this->default;
-		    $schema->required = $this->required;
-		    $schema->type = $this->type;
-		}
+		$schema = new Schema();
+		$schema->format = $this->format;
+		$schema->title = $this->title;
+		$schema->description = $this->description;
+		$schema->default = $this->default;
+		$schema->required = $this->required;
+		$schema->type = $this->type;
+		$schema->setFromRef($this->getFromRef());
+		$schema->setDocumentPath($this->getDocumentPath());
+		$schema->addMeta($this, 'origin');
 		return $schema;
 	}
 }

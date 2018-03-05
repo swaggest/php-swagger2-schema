@@ -8,13 +8,14 @@ namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
 use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Exception;
+use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\Schema as Schema1;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * A JSON Schema for Swagger 2.0 API.
- * @method static SwaggerSchema import($data, Context $options=null)
  */
 class SwaggerSchema extends ClassStructure {
 	const CONST_D1BD83 = '2.0';
@@ -349,5 +350,21 @@ class SwaggerSchema extends ClassStructure {
 		return $this;
 	}
 	/** @codeCoverageIgnoreEnd */
+
+	/**
+	 * @param mixed $data
+	 * @param Context $options
+	 * @return static
+	 * @throws Exception
+	 * @throws InvalidValue
+	 */
+	public static function import($data, Context $options = NULL)
+	{
+		if ($options === null) {
+		    $options = new Context();
+		}
+		$options->applyDefaults = false;
+		return parent::import($data, $options);
+	}
 }
 

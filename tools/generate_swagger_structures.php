@@ -3,12 +3,19 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Exception;
+use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\RemoteRef\Preloaded;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\PhpCodeBuilder\JsonSchema\PhpBuilder;
 use Swaggest\PhpCodeBuilder\JsonSchema\SchemaExporterInterface;
+use Swaggest\PhpCodeBuilder\PhpClass;
 use Swaggest\PhpCodeBuilder\PhpCode;
 use Swaggest\PhpCodeBuilder\PhpFile;
+use Swaggest\PhpCodeBuilder\PhpFlags;
+use Swaggest\PhpCodeBuilder\PhpFunction;
+use Swaggest\PhpCodeBuilder\PhpNamedVar;
+use Swaggest\PhpCodeBuilder\PhpStdType;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
@@ -60,6 +67,22 @@ foreach ($builder->getGeneratedClasses() as $class) {
 
     if ($class->path === '#') {
         $className = 'SwaggerSchema';
+        $class->class->getPhpDoc()->removeById(PhpBuilder::IMPORT_METHOD_PHPDOC_ID);
+        $importFunc = new PhpFunction('import', PhpFlags::VIS_PUBLIC, true);
+        $importFunc->setResult(PhpStdType::tStatic());
+        $importFunc->addArgument(new PhpNamedVar('data', PhpStdType::mixed()));
+        $importFunc->addArgument(new PhpNamedVar('options', PhpClass::byFQN(Context::class), true, null));
+        $importFunc->addThrows(PhpClass::byFQN(Exception::class));
+        $importFunc->addThrows(PhpClass::byFQN(InvalidValue::class));
+        $importFunc->setBody(<<<'PHP'
+if ($options === null) {
+    $options = new Context();
+}
+$options->applyDefaults = false;
+return parent::import($data, $options);
+PHP
+        );
+        $class->class->addMethod($importFunc);
     } else {
         $schema = $class->schema;
         $path = $class->path;
