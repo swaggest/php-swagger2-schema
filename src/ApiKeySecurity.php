@@ -7,15 +7,17 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/apiKeySecurity
+ * @method static ApiKeySecurity import($data, Context $options=null)
  */
 class ApiKeySecurity extends ClassStructure {
-	const APIKEY = 'apiKey';
+	const API_KEY = 'apiKey';
 
 	const HEADER = 'header';
 
@@ -35,25 +37,25 @@ class ApiKeySecurity extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->type = JsonBasicSchema::string();
+		$properties->type = Schema::string();
 		$properties->type->enum = array(
-		    self::APIKEY,
+		    self::API_KEY,
 		);
-		$properties->name = JsonBasicSchema::string();
-		$properties->in = JsonBasicSchema::string();
+		$properties->name = Schema::string();
+		$properties->in = Schema::string();
 		$properties->in->enum = array(
 		    self::HEADER,
 		    self::QUERY,
 		);
-		$properties->description = JsonBasicSchema::string();
+		$properties->description = Schema::string();
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 		$ownerSchema->required = array (
 		  0 => 'type',
 		  1 => 'name',

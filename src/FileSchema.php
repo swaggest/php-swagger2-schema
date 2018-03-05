@@ -7,15 +7,18 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
+use Swaggest\JsonSchema\SchemaExporter;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * A deterministic version of a JSON Schema object.
  * Built from #/definitions/fileSchema
+ * @method static FileSchema import($data, Context $options=null)
  */
-class FileSchema extends ClassStructure {
+class FileSchema extends ClassStructure implements SchemaExporter {
 	const FILE = 'file';
 
 	/** @var string */
@@ -45,31 +48,31 @@ class FileSchema extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->format = JsonBasicSchema::string();
-		$properties->title = JsonBasicSchema::string();
-		$properties->description = JsonBasicSchema::string();
-		$properties->default = new JsonBasicSchema();
-		$properties->required = JsonBasicSchema::arr();
-		$properties->required->items = JsonBasicSchema::string();
+		$properties->format = Schema::string();
+		$properties->title = Schema::string();
+		$properties->description = Schema::string();
+		$properties->default = new Schema();
+		$properties->required = Schema::arr();
+		$properties->required->items = Schema::string();
 		$properties->required->minItems = 1;
 		$properties->required->uniqueItems = true;
-		$properties->type = JsonBasicSchema::string();
+		$properties->type = Schema::string();
 		$properties->type->enum = array(
 		    self::FILE,
 		);
-		$properties->readOnly = JsonBasicSchema::boolean();
+		$properties->readOnly = Schema::boolean();
 		$properties->readOnly->default = false;
 		$properties->externalDocs = ExternalDocs::schema();
-		$properties->example = new JsonBasicSchema();
+		$properties->example = new Schema();
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
-		$ownerSchema->description = 'A deterministic version of a JSON Schema object.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
+		$ownerSchema->description = "A deterministic version of a JSON Schema object.";
 		$ownerSchema->required = array (
 		  0 => 'type',
 		);
@@ -182,5 +185,23 @@ class FileSchema extends ClassStructure {
 		return $this;
 	}
 	/** @codeCoverageIgnoreEnd */
+
+	/**
+	 * @return Schema
+	 */
+	function exportSchema()
+	{
+		static $schema;
+		if ($schema === null) {
+		    $schema = new Schema();    
+		    $schema->format = $this->format;
+		    $schema->title = $this->title;
+		    $schema->description = $this->description;
+		    $schema->default = $this->default;
+		    $schema->required = $this->required;
+		    $schema->type = $this->type;
+		}
+		return $schema;
+	}
 }
 

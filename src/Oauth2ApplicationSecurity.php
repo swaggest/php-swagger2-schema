@@ -7,12 +7,14 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/oauth2ApplicationSecurity
+ * @method static Oauth2ApplicationSecurity import($data, Context $options=null)
  */
 class Oauth2ApplicationSecurity extends ClassStructure {
 	const OAUTH2 = 'oauth2';
@@ -36,27 +38,27 @@ class Oauth2ApplicationSecurity extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->type = JsonBasicSchema::string();
+		$properties->type = Schema::string();
 		$properties->type->enum = array(
 		    self::OAUTH2,
 		);
-		$properties->flow = JsonBasicSchema::string();
+		$properties->flow = Schema::string();
 		$properties->flow->enum = array(
 		    self::APPLICATION,
 		);
-		$properties->scopes = JsonBasicSchema::object();
-		$properties->scopes->additionalProperties = JsonBasicSchema::string();
-		$properties->tokenUrl = JsonBasicSchema::string();
-		$properties->tokenUrl->format = 'uri';
-		$properties->description = JsonBasicSchema::string();
+		$properties->scopes = Schema::object();
+		$properties->scopes->additionalProperties = Schema::string();
+		$properties->tokenUrl = Schema::string();
+		$properties->tokenUrl->format = "uri";
+		$properties->description = Schema::string();
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 		$ownerSchema->required = array (
 		  0 => 'type',
 		  1 => 'flow',

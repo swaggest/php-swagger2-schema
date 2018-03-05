@@ -7,14 +7,17 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
+use Swaggest\JsonSchema\SchemaExporter;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/primitivesItems
+ * @method static PrimitivesItems import($data, Context $options=null)
  */
-class PrimitivesItems extends ClassStructure {
+class PrimitivesItems extends ClassStructure implements SchemaExporter {
 	const STRING = 'string';
 
 	const NUMBER = 'number';
@@ -85,11 +88,11 @@ class PrimitivesItems extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->type = JsonBasicSchema::string();
+		$properties->type = Schema::string();
 		$properties->type->enum = array(
 		    self::STRING,
 		    self::NUMBER,
@@ -97,51 +100,51 @@ class PrimitivesItems extends ClassStructure {
 		    self::BOOLEAN,
 		    self::_ARRAY,
 		);
-		$properties->format = JsonBasicSchema::string();
+		$properties->format = Schema::string();
 		$properties->items = PrimitivesItems::schema();
-		$properties->collectionFormat = JsonBasicSchema::string();
+		$properties->collectionFormat = Schema::string();
 		$properties->collectionFormat->enum = array(
 		    self::CSV,
 		    self::SSV,
 		    self::TSV,
 		    self::PIPES,
 		);
-		$properties->collectionFormat->default = 'csv';
-		$properties->default = new JsonBasicSchema();
-		$properties->maximum = JsonBasicSchema::number();
-		$properties->exclusiveMaximum = JsonBasicSchema::boolean();
+		$properties->collectionFormat->default = "csv";
+		$properties->default = new Schema();
+		$properties->maximum = Schema::number();
+		$properties->exclusiveMaximum = Schema::boolean();
 		$properties->exclusiveMaximum->default = false;
-		$properties->minimum = JsonBasicSchema::number();
-		$properties->exclusiveMinimum = JsonBasicSchema::boolean();
+		$properties->minimum = Schema::number();
+		$properties->exclusiveMinimum = Schema::boolean();
 		$properties->exclusiveMinimum->default = false;
-		$properties->maxLength = JsonBasicSchema::integer();
+		$properties->maxLength = Schema::integer();
 		$properties->maxLength->minimum = 0;
-		$properties->minLength = new JsonBasicSchema();
-		$properties->minLength->allOf[0] = JsonBasicSchema::integer();
+		$properties->minLength = new Schema();
+		$properties->minLength->allOf[0] = Schema::integer();
 		$properties->minLength->allOf[0]->minimum = 0;
-		$properties->minLength->allOf[1] = new JsonBasicSchema();
+		$properties->minLength->allOf[1] = new Schema();
 		$properties->minLength->allOf[1]->default = 0;
-		$properties->pattern = JsonBasicSchema::string();
-		$properties->pattern->format = 'regex';
-		$properties->maxItems = JsonBasicSchema::integer();
+		$properties->pattern = Schema::string();
+		$properties->pattern->format = "regex";
+		$properties->maxItems = Schema::integer();
 		$properties->maxItems->minimum = 0;
-		$properties->minItems = new JsonBasicSchema();
-		$properties->minItems->allOf[0] = JsonBasicSchema::integer();
+		$properties->minItems = new Schema();
+		$properties->minItems->allOf[0] = Schema::integer();
 		$properties->minItems->allOf[0]->minimum = 0;
-		$properties->minItems->allOf[1] = new JsonBasicSchema();
+		$properties->minItems->allOf[1] = new Schema();
 		$properties->minItems->allOf[1]->default = 0;
-		$properties->uniqueItems = JsonBasicSchema::boolean();
+		$properties->uniqueItems = Schema::boolean();
 		$properties->uniqueItems->default = false;
-		$properties->enum = JsonBasicSchema::arr();
+		$properties->enum = Schema::arr();
 		$properties->enum->minItems = 1;
 		$properties->enum->uniqueItems = true;
-		$properties->multipleOf = JsonBasicSchema::number();
+		$properties->multipleOf = Schema::number();
 		$properties->multipleOf->minimum = 0;
 		$properties->multipleOf->exclusiveMinimum = true;
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 	}
 
 	/**
@@ -347,5 +350,33 @@ class PrimitivesItems extends ClassStructure {
 		return $this;
 	}
 	/** @codeCoverageIgnoreEnd */
+
+	/**
+	 * @return Schema
+	 */
+	function exportSchema()
+	{
+		static $schema;
+		if ($schema === null) {
+		    $schema = new Schema();    
+		    $schema->type = $this->type;
+		    $schema->format = $this->format;
+		    $schema->items = $this->items;
+		    $schema->default = $this->default;
+		    $schema->maximum = $this->maximum;
+		    $schema->exclusiveMaximum = $this->exclusiveMaximum;
+		    $schema->minimum = $this->minimum;
+		    $schema->exclusiveMinimum = $this->exclusiveMinimum;
+		    $schema->maxLength = $this->maxLength;
+		    $schema->minLength = $this->minLength;
+		    $schema->pattern = $this->pattern;
+		    $schema->maxItems = $this->maxItems;
+		    $schema->minItems = $this->minItems;
+		    $schema->uniqueItems = $this->uniqueItems;
+		    $schema->enum = $this->enum;
+		    $schema->multipleOf = $this->multipleOf;
+		}
+		return $schema;
+	}
 }
 

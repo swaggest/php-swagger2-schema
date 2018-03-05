@@ -7,13 +7,15 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Contact information for the owners of the API.
  * Built from #/definitions/contact
+ * @method static Contact import($data, Context $options=null)
  */
 class Contact extends ClassStructure {
 	/** @var string The identifying name of the contact person/organization. */
@@ -27,23 +29,23 @@ class Contact extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->name = JsonBasicSchema::string();
-		$properties->name->description = 'The identifying name of the contact person/organization.';
-		$properties->url = JsonBasicSchema::string();
-		$properties->url->description = 'The URL pointing to the contact information.';
-		$properties->url->format = 'uri';
-		$properties->email = JsonBasicSchema::string();
-		$properties->email->description = 'The email address of the contact person/organization.';
-		$properties->email->format = 'email';
+		$properties->name = Schema::string();
+		$properties->name->description = "The identifying name of the contact person/organization.";
+		$properties->url = Schema::string();
+		$properties->url->description = "The URL pointing to the contact information.";
+		$properties->url->format = "uri";
+		$properties->email = Schema::string();
+		$properties->email->description = "The email address of the contact person/organization.";
+		$properties->email->format = "email";
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
-		$ownerSchema->description = 'Contact information for the owners of the API.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
+		$ownerSchema->description = "Contact information for the owners of the API.";
 	}
 
 	/**

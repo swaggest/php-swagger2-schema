@@ -7,12 +7,14 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/xml
+ * @method static Xml import($data, Context $options=null)
  */
 class Xml extends ClassStructure {
 	/** @var string */
@@ -32,21 +34,21 @@ class Xml extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->name = JsonBasicSchema::string();
-		$properties->namespace = JsonBasicSchema::string();
-		$properties->prefix = JsonBasicSchema::string();
-		$properties->attribute = JsonBasicSchema::boolean();
+		$properties->name = Schema::string();
+		$properties->namespace = Schema::string();
+		$properties->prefix = Schema::string();
+		$properties->attribute = Schema::boolean();
 		$properties->attribute->default = false;
-		$properties->wrapped = JsonBasicSchema::boolean();
+		$properties->wrapped = Schema::boolean();
 		$properties->wrapped->default = false;
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 	}
 
 	/**

@@ -1,13 +1,21 @@
 <?php
 
+namespace Swaggest\SwaggerSchema;
+
 use Swaggest\JsonSchema\Context;
 use Swaggest\JsonSchema\RemoteRef\Preloaded;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\PhpCodeBuilder\JsonSchema\PhpBuilder;
+use Swaggest\PhpCodeBuilder\JsonSchema\SchemaExporterInterface;
 use Swaggest\PhpCodeBuilder\PhpCode;
 use Swaggest\PhpCodeBuilder\PhpFile;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+} else {
+    require_once __DIR__ . '/../../../../vendor/autoload.php';
+}
+
 
 $schemaData = json_decode(file_get_contents(__DIR__ . '/../spec/swagger-schema.json'));
 
@@ -47,6 +55,8 @@ foreach ($builder->getGeneratedClasses() as $class) {
     }
 
     $class->class->setDescription(trim($desc));
+    SchemaExporterInterface::process($class->class, $class->schema);
+
 
     if ($class->path === '#') {
         $className = 'SwaggerSchema';

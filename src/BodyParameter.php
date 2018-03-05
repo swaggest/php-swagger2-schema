@@ -7,12 +7,14 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema as Schema1;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/bodyParameter
+ * @method static BodyParameter import($data, Context $options=null)
  */
 class BodyParameter extends ClassStructure {
 	const BODY = 'body';
@@ -34,27 +36,27 @@ class BodyParameter extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema1 $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema1 $ownerSchema)
 	{
-		$properties->description = JsonBasicSchema::string();
-		$properties->description->description = 'A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.';
-		$properties->name = JsonBasicSchema::string();
-		$properties->name->description = 'The name of the parameter.';
-		$properties->in = JsonBasicSchema::string();
+		$properties->description = Schema1::string();
+		$properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
+		$properties->name = Schema1::string();
+		$properties->name->description = "The name of the parameter.";
+		$properties->in = Schema1::string();
 		$properties->in->enum = array(
 		    self::BODY,
 		);
-		$properties->in->description = 'Determines the location of the parameter.';
-		$properties->required = JsonBasicSchema::boolean();
-		$properties->required->description = 'Determines whether or not this parameter is required or optional.';
+		$properties->in->description = "Determines the location of the parameter.";
+		$properties->required = Schema1::boolean();
+		$properties->required->description = "Determines whether or not this parameter is required or optional.";
 		$properties->required->default = false;
 		$properties->schema = Schema::schema();
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema1();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 		$ownerSchema->required = array (
 		  0 => 'name',
 		  1 => 'in',

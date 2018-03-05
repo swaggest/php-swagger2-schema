@@ -7,12 +7,14 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/basicAuthenticationSecurity
+ * @method static BasicAuthenticationSecurity import($data, Context $options=null)
  */
 class BasicAuthenticationSecurity extends ClassStructure {
 	const BASIC = 'basic';
@@ -25,19 +27,19 @@ class BasicAuthenticationSecurity extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->type = JsonBasicSchema::string();
+		$properties->type = Schema::string();
 		$properties->type->enum = array(
 		    self::BASIC,
 		);
-		$properties->description = JsonBasicSchema::string();
+		$properties->description = Schema::string();
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 		$ownerSchema->required = array (
 		  0 => 'type',
 		);

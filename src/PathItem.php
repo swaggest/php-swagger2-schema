@@ -7,12 +7,14 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Schema as JsonBasicSchema;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
  * Built from #/definitions/pathItem
+ * @method static PathItem import($data, Context $options=null)
  */
 class PathItem extends ClassStructure {
 	/** @var string */
@@ -44,11 +46,11 @@ class PathItem extends ClassStructure {
 
 	/**
 	 * @param Properties|static $properties
-	 * @param JsonBasicSchema $ownerSchema
+	 * @param Schema $ownerSchema
 	 */
-	public static function setUpProperties($properties, JsonBasicSchema $ownerSchema)
+	public static function setUpProperties($properties, Schema $ownerSchema)
 	{
-		$properties->ref = JsonBasicSchema::string();
+		$properties->ref = Schema::string();
 		$ownerSchema->addPropertyMapping('$ref', self::names()->ref);
 		$properties->get = Operation::schema();
 		$properties->put = Operation::schema();
@@ -57,11 +59,11 @@ class PathItem extends ClassStructure {
 		$properties->options = Operation::schema();
 		$properties->head = Operation::schema();
 		$properties->patch = Operation::schema();
-		$properties->parameters = JsonBasicSchema::arr();
-		$properties->parameters->items = new JsonBasicSchema();
-		$properties->parameters->items->oneOf[0] = new JsonBasicSchema();
+		$properties->parameters = Schema::arr();
+		$properties->parameters->items = new Schema();
+		$properties->parameters->items->oneOf[0] = new Schema();
 		$properties->parameters->items->oneOf[0]->oneOf[0] = BodyParameter::schema();
-		$properties->parameters->items->oneOf[0]->oneOf[1] = JsonBasicSchema::object();
+		$properties->parameters->items->oneOf[0]->oneOf[1] = Schema::object();
 		$properties->parameters->items->oneOf[0]->oneOf[1]->oneOf[0] = HeaderParameterSubSchema::schema();
 		$properties->parameters->items->oneOf[0]->oneOf[1]->oneOf[1] = FormDataParameterSubSchema::schema();
 		$properties->parameters->items->oneOf[0]->oneOf[1]->oneOf[2] = QueryParameterSubSchema::schema();
@@ -72,12 +74,12 @@ class PathItem extends ClassStructure {
 		  2 => 'type',
 		);
 		$properties->parameters->items->oneOf[1] = JsonReference::schema();
-		$properties->parameters->description = 'The parameters needed to send a valid API call.';
+		$properties->parameters->description = "The parameters needed to send a valid API call.";
 		$properties->parameters->uniqueItems = true;
 		$ownerSchema->type = 'object';
 		$ownerSchema->additionalProperties = false;
-		$ownerSchema->patternProperties['^x-'] = new JsonBasicSchema();
-		$ownerSchema->patternProperties['^x-']->description = 'Any property starting with x- is valid.';
+		$ownerSchema->patternProperties['^x-'] = new Schema();
+		$ownerSchema->patternProperties['^x-']->description = "Any property starting with x- is valid.";
 	}
 
 	/**
