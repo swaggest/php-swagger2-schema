@@ -2,9 +2,9 @@
 
 namespace Swaggest\SwaggerSchema\Tests\Helper;
 
-use Swaggest\SwaggerSchema\Schema;
+use Swaggest\SwaggerSchema\DefinitionsSchema;
 
-class CustomSchema extends Schema
+class CustomSchema extends DefinitionsSchema
 {
 
 }

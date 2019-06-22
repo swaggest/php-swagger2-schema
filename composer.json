@@ -1,42 +1,40 @@
 {
-    "name": "swaggest/swagger2-schema",
-    "description": "Swagger 2.0 schema PHP mappings",
-    "type": "library",
-    "require": {
-        "swaggest/json-schema": "^0.12.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.8.35",
-        "phpunit/php-code-coverage": "2.2.4",
-        "swaggest/php-code-builder": "^0.1.4"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Viacheslav Poturaev",
-            "email": "vearutop@gmail.com"
-        }
-    ],
-    "support": {
-        "email": "vearutop@gmail.com"
-    },
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Swaggest\\SwaggerSchema\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Swaggest\\SwaggerSchema\\Tests\\": "tests/src/"
-        }
-    },
-    "scripts": {
-        "gen-swg-struct": "php ./tools/generate_swagger_structures.php"
-    },
-    "config": {
-        "platform": {
-            "php": "5.4.45"
-        }
+  "name": "swaggest/swagger2-schema",
+  "description": "Swagger 2.0 schema PHP mappings",
+  "type": "library",
+  "require": {
+    "swaggest/json-schema": "^0.12.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8.35",
+    "phpunit/php-code-coverage": "2.2.4",
+    "swaggest/php-code-builder": "^0.2"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Viacheslav Poturaev",
+      "email": "vearutop@gmail.com"
     }
+  ],
+  "support": {
+    "email": "vearutop@gmail.com"
+  },
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Swaggest\\SwaggerSchema\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Swaggest\\SwaggerSchema\\Tests\\": "tests/src/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "5.5.9"
+    }
+  }
 }

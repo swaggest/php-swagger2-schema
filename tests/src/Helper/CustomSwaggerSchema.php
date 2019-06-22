@@ -3,7 +3,7 @@
 namespace Swaggest\SwaggerSchema\Tests\Helper;
 
 use Swaggest\JsonSchema\Context;
-use Swaggest\SwaggerSchema\Schema;
+use Swaggest\SwaggerSchema\DefinitionsSchema;
 use Swaggest\SwaggerSchema\SwaggerSchema;
 
 class CustomSwaggerSchema extends SwaggerSchema
@@ -14,7 +14,7 @@ class CustomSwaggerSchema extends SwaggerSchema
             $options = new Context();
         }
         $options->applyDefaults = false;
-        $options->objectItemClassMapping[Schema::className()] = CustomSchema::className();
+        $options->objectItemClassMapping[DefinitionsSchema::className()] = CustomSchema::className();
         return parent::import($data, $options);
     }
 }

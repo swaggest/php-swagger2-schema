@@ -13,3 +13,7 @@ test:
 
 test-coverage:
 	@php -derror_reporting="E_ALL & ~E_DEPRECATED" -dzend_extension=xdebug.so vendor/bin/phpunit --coverage-text
+
+gen:
+	@php ./tools/generate_swagger_structures.php
+	@php ./tools/generate_status_codes.php
