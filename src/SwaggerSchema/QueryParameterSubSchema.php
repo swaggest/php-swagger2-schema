@@ -16,11 +16,11 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/pathParameterSubSchema
+ * Built from #/definitions/queryParameterSubSchema
  */
-class PathParameterSubSchema extends ClassStructure implements SchemaExporter
+class QueryParameterSubSchema extends ClassStructure implements SchemaExporter
 {
-    const PATH = 'path';
+    const QUERY = 'query';
 
     const STRING = 'string';
 
@@ -40,6 +40,8 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
 
     const PIPES = 'pipes';
 
+    const MULTI = 'multi';
+
     const X_PROPERTY_PATTERN = '^x-';
 
     /** @var bool Determines whether or not this parameter is required or optional. */
@@ -54,6 +56,9 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @var string The name of the parameter. */
     public $name;
 
+    /** @var bool allows sending a parameter by name only or with an empty value. */
+    public $allowEmptyValue;
+
     /** @var string */
     public $type;
 
@@ -66,6 +71,7 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @var string */
     public $collectionFormat;
 
+    /** @var mixed */
     public $default;
 
     /** @var float */
@@ -111,19 +117,20 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->required = Schema::boolean();
-        $properties->required->enum = array(
-            true,
-        );
         $properties->required->description = "Determines whether or not this parameter is required or optional.";
+        $properties->required->default = false;
         $properties->in = Schema::string();
         $properties->in->enum = array(
-            self::PATH,
+            self::QUERY,
         );
         $properties->in->description = "Determines the location of the parameter.";
         $properties->description = Schema::string();
         $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
         $properties->name = Schema::string();
         $properties->name->description = "The name of the parameter.";
+        $properties->allowEmptyValue = Schema::boolean();
+        $properties->allowEmptyValue->description = "allows sending a parameter by name only or with an empty value.";
+        $properties->allowEmptyValue->default = false;
         $properties->type = Schema::string();
         $properties->type->enum = array(
             self::STRING,
@@ -140,9 +147,10 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
             self::SSV,
             self::TSV,
             self::PIPES,
+            self::MULTI,
         );
         $properties->collectionFormat->default = "csv";
-        $properties->collectionFormat->setFromRef('#/definitions/collectionFormat');
+        $properties->collectionFormat->setFromRef('#/definitions/collectionFormatWithMulti');
         $properties->default = new Schema();
         $properties->default->setFromRef('#/definitions/default');
         $properties->maximum = Schema::number();
@@ -189,6 +197,7 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
         $properties->multipleOf->minimum = 0;
         $properties->multipleOf->exclusiveMinimum = true;
         $properties->multipleOf->setFromRef('#/definitions/multipleOf');
+        $ownerSchema = new Schema();
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
         $patternProperty->additionalProperties = true;
@@ -196,10 +205,7 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->required = array(
-            0 => 'required',
-        );
-        $ownerSchema->setFromRef('#/definitions/pathParameterSubSchema');
+        $ownerSchema->setFromRef('#/definitions/queryParameterSubSchema');
     }
 
     /**
@@ -246,6 +252,18 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param bool $allowEmptyValue allows sending a parameter by name only or with an empty value.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setAllowEmptyValue($allowEmptyValue)
+    {
+        $this->allowEmptyValue = $allowEmptyValue;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -299,7 +317,7 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param $default
+     * @param mixed $default
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -472,7 +490,7 @@ class PathParameterSubSchema extends ClassStructure implements SchemaExporter
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

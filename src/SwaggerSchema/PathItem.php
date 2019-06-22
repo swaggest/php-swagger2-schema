@@ -221,7 +221,7 @@ class PathItem extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

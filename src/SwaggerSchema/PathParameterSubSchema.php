@@ -16,11 +16,11 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/formDataParameterSubSchema
+ * Built from #/definitions/pathParameterSubSchema
  */
-class FormDataParameterSubSchema extends ClassStructure implements SchemaExporter
+class PathParameterSubSchema extends ClassStructure implements SchemaExporter
 {
-    const FORM_DATA = 'formData';
+    const PATH = 'path';
 
     const STRING = 'string';
 
@@ -32,8 +32,6 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
 
     const _ARRAY = 'array';
 
-    const FILE = 'file';
-
     const CSV = 'csv';
 
     const SSV = 'ssv';
@@ -41,8 +39,6 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     const TSV = 'tsv';
 
     const PIPES = 'pipes';
-
-    const MULTI = 'multi';
 
     const X_PROPERTY_PATTERN = '^x-';
 
@@ -58,9 +54,6 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     /** @var string The name of the parameter. */
     public $name;
 
-    /** @var bool allows sending a parameter by name only or with an empty value. */
-    public $allowEmptyValue;
-
     /** @var string */
     public $type;
 
@@ -73,6 +66,7 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     /** @var string */
     public $collectionFormat;
 
+    /** @var mixed */
     public $default;
 
     /** @var float */
@@ -118,20 +112,19 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->required = Schema::boolean();
+        $properties->required->enum = array(
+            true,
+        );
         $properties->required->description = "Determines whether or not this parameter is required or optional.";
-        $properties->required->default = false;
         $properties->in = Schema::string();
         $properties->in->enum = array(
-            self::FORM_DATA,
+            self::PATH,
         );
         $properties->in->description = "Determines the location of the parameter.";
         $properties->description = Schema::string();
         $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
         $properties->name = Schema::string();
         $properties->name->description = "The name of the parameter.";
-        $properties->allowEmptyValue = Schema::boolean();
-        $properties->allowEmptyValue->description = "allows sending a parameter by name only or with an empty value.";
-        $properties->allowEmptyValue->default = false;
         $properties->type = Schema::string();
         $properties->type->enum = array(
             self::STRING,
@@ -139,7 +132,6 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
             self::BOOLEAN,
             self::INTEGER,
             self::_ARRAY,
-            self::FILE,
         );
         $properties->format = Schema::string();
         $properties->items = PrimitivesItems::schema();
@@ -149,10 +141,9 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
             self::SSV,
             self::TSV,
             self::PIPES,
-            self::MULTI,
         );
         $properties->collectionFormat->default = "csv";
-        $properties->collectionFormat->setFromRef('#/definitions/collectionFormatWithMulti');
+        $properties->collectionFormat->setFromRef('#/definitions/collectionFormat');
         $properties->default = new Schema();
         $properties->default->setFromRef('#/definitions/default');
         $properties->maximum = Schema::number();
@@ -199,6 +190,7 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
         $properties->multipleOf->minimum = 0;
         $properties->multipleOf->exclusiveMinimum = true;
         $properties->multipleOf->setFromRef('#/definitions/multipleOf');
+        $ownerSchema = new Schema();
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
         $patternProperty->additionalProperties = true;
@@ -206,7 +198,10 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->setFromRef('#/definitions/formDataParameterSubSchema');
+        $ownerSchema->required = array(
+            0 => 'required',
+        );
+        $ownerSchema->setFromRef('#/definitions/pathParameterSubSchema');
     }
 
     /**
@@ -253,18 +248,6 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param bool $allowEmptyValue allows sending a parameter by name only or with an empty value.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setAllowEmptyValue($allowEmptyValue)
-    {
-        $this->allowEmptyValue = $allowEmptyValue;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -318,7 +301,7 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param $default
+     * @param mixed $default
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -491,7 +474,7 @@ class FormDataParameterSubSchema extends ClassStructure implements SchemaExporte
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

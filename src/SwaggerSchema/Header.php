@@ -16,19 +16,17 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/headerParameterSubSchema
+ * Built from #/definitions/header
  */
-class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
+class Header extends ClassStructure implements SchemaExporter
 {
-    const HEADER = 'header';
-
     const STRING = 'string';
 
     const NUMBER = 'number';
 
-    const BOOLEAN = 'boolean';
-
     const INTEGER = 'integer';
+
+    const BOOLEAN = 'boolean';
 
     const _ARRAY = 'array';
 
@@ -42,18 +40,6 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
 
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var bool Determines whether or not this parameter is required or optional. */
-    public $required;
-
-    /** @var string Determines the location of the parameter. */
-    public $in;
-
-    /** @var string A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed. */
-    public $description;
-
-    /** @var string The name of the parameter. */
-    public $name;
-
     /** @var string */
     public $type;
 
@@ -66,6 +52,7 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @var string */
     public $collectionFormat;
 
+    /** @var mixed */
     public $default;
 
     /** @var float */
@@ -104,30 +91,21 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @var float */
     public $multipleOf;
 
+    /** @var string */
+    public $description;
+
     /**
      * @param Properties|static $properties
      * @param Schema $ownerSchema
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->required = Schema::boolean();
-        $properties->required->description = "Determines whether or not this parameter is required or optional.";
-        $properties->required->default = false;
-        $properties->in = Schema::string();
-        $properties->in->enum = array(
-            self::HEADER,
-        );
-        $properties->in->description = "Determines the location of the parameter.";
-        $properties->description = Schema::string();
-        $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
-        $properties->name = Schema::string();
-        $properties->name->description = "The name of the parameter.";
         $properties->type = Schema::string();
         $properties->type->enum = array(
             self::STRING,
             self::NUMBER,
-            self::BOOLEAN,
             self::INTEGER,
+            self::BOOLEAN,
             self::_ARRAY,
         );
         $properties->format = Schema::string();
@@ -187,6 +165,8 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
         $properties->multipleOf->minimum = 0;
         $properties->multipleOf->exclusiveMinimum = true;
         $properties->multipleOf->setFromRef('#/definitions/multipleOf');
+        $properties->description = Schema::string();
+        $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
         $patternProperty->additionalProperties = true;
@@ -194,56 +174,11 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->setFromRef('#/definitions/headerParameterSubSchema');
+        $ownerSchema->required = array(
+            0 => 'type',
+        );
+        $ownerSchema->setFromRef('#/definitions/header');
     }
-
-    /**
-     * @param bool $required Determines whether or not this parameter is required or optional.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setRequired($required)
-    {
-        $this->required = $required;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $in Determines the location of the parameter.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setIn($in)
-    {
-        $this->in = $in;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $name The name of the parameter.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
 
     /**
      * @param string $type
@@ -294,7 +229,7 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param $default
+     * @param mixed $default
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -450,6 +385,18 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * @param string $description
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
      * @codeCoverageIgnoreStart
      */
     public function getXValues()
@@ -467,7 +414,7 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart
@@ -489,7 +436,6 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
     function exportSchema()
     {
         $schema = new Schema();
-        $schema->description = $this->description;
         $schema->type = $this->type;
         $schema->format = $this->format;
         $schema->items = $this->items;
@@ -506,6 +452,7 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
         $schema->uniqueItems = $this->uniqueItems;
         $schema->enum = $this->enum;
         $schema->multipleOf = $this->multipleOf;
+        $schema->description = $this->description;
         $schema->__fromRef = $this->__fromRef;
         $schema->setDocumentPath($this->getDocumentPath());
         $schema->addMeta($this, 'origin');

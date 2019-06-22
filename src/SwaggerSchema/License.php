@@ -15,26 +15,17 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/xml
+ * Built from #/definitions/license
  */
-class Xml extends ClassStructure
+class License extends ClassStructure
 {
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string */
+    /** @var string The name of the license type. It's encouraged to use an OSI compatible license. */
     public $name;
 
-    /** @var string */
-    public $namespace;
-
-    /** @var string */
-    public $prefix;
-
-    /** @var bool */
-    public $attribute;
-
-    /** @var bool */
-    public $wrapped;
+    /** @var string The URL pointing to the license. */
+    public $url;
 
     /**
      * @param Properties|static $properties
@@ -43,12 +34,10 @@ class Xml extends ClassStructure
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->name = Schema::string();
-        $properties->namespace = Schema::string();
-        $properties->prefix = Schema::string();
-        $properties->attribute = Schema::boolean();
-        $properties->attribute->default = false;
-        $properties->wrapped = Schema::boolean();
-        $properties->wrapped->default = false;
+        $properties->name->description = "The name of the license type. It's encouraged to use an OSI compatible license.";
+        $properties->url = Schema::string();
+        $properties->url->description = "The URL pointing to the license.";
+        $properties->url->format = "uri";
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -57,11 +46,14 @@ class Xml extends ClassStructure
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->setFromRef('#/definitions/xml');
+        $ownerSchema->required = array(
+            0 => 'name',
+        );
+        $ownerSchema->setFromRef('#/definitions/license');
     }
 
     /**
-     * @param string $name
+     * @param string $name The name of the license type. It's encouraged to use an OSI compatible license.
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -73,49 +65,13 @@ class Xml extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $namespace
+     * @param string $url The URL pointing to the license.
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setNamespace($namespace)
+    public function setUrl($url)
     {
-        $this->namespace = $namespace;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $prefix
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param bool $attribute
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setAttribute($attribute)
-    {
-        $this->attribute = $attribute;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param bool $wrapped
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setWrapped($wrapped)
-    {
-        $this->wrapped = $wrapped;
+        $this->url = $url;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -138,7 +94,7 @@ class Xml extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

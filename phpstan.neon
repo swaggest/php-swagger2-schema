@@ -1,7 +1,3 @@
 parameters:
 	ignoreErrors:
-		- '#Access to an undefined property static\(Swaggest\\JsonSchema\\JsonSchema\)\|Swaggest\\JsonSchema\\Constraint\\Properties::#'
-		- '#Access to an undefined property .+Swaggest\\JsonSchema\\NameMirror::.+#'
-		- '#should be compatible with parameter \$properties#'
-		- '#PHPDoc tag @param references unknown parameter: \$schema#'
-		- '#should return array<string>|null but returns array<int, int|string>#'
+	- '#Access to an undefined property static\(.+\)\|Swaggest\\JsonSchema\\Constraint\\Properties\:\:#'

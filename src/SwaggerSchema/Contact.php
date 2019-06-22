@@ -15,18 +15,21 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * information about external documentation
- * Built from #/definitions/externalDocs
+ * Contact information for the owners of the API.
+ * Built from #/definitions/contact
  */
-class ExternalDocs extends ClassStructure
+class Contact extends ClassStructure
 {
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string */
-    public $description;
+    /** @var string The identifying name of the contact person/organization. */
+    public $name;
 
-    /** @var string */
+    /** @var string The URL pointing to the contact information. */
     public $url;
+
+    /** @var string The email address of the contact person/organization. */
+    public $email;
 
     /**
      * @param Properties|static $properties
@@ -34,9 +37,14 @@ class ExternalDocs extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->description = Schema::string();
+        $properties->name = Schema::string();
+        $properties->name->description = "The identifying name of the contact person/organization.";
         $properties->url = Schema::string();
+        $properties->url->description = "The URL pointing to the contact information.";
         $properties->url->format = "uri";
+        $properties->email = Schema::string();
+        $properties->email->description = "The email address of the contact person/organization.";
+        $properties->email->format = "email";
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -45,33 +53,42 @@ class ExternalDocs extends ClassStructure
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->description = "information about external documentation";
-        $ownerSchema->required = array(
-            0 => 'url',
-        );
-        $ownerSchema->setFromRef('#/definitions/externalDocs');
+        $ownerSchema->description = "Contact information for the owners of the API.";
+        $ownerSchema->setFromRef('#/definitions/contact');
     }
 
     /**
-     * @param string $description
+     * @param string $name The identifying name of the contact person/organization.
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setDescription($description)
+    public function setName($name)
     {
-        $this->description = $description;
+        $this->name = $name;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $url
+     * @param string $url The URL pointing to the contact information.
      * @return $this
      * @codeCoverageIgnoreStart
      */
     public function setUrl($url)
     {
         $this->url = $url;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $email The email address of the contact person/organization.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -94,7 +111,7 @@ class ExternalDocs extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

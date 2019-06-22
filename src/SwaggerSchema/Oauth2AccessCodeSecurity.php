@@ -15,16 +15,30 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/basicAuthenticationSecurity
+ * Built from #/definitions/oauth2AccessCodeSecurity
  */
-class BasicAuthenticationSecurity extends ClassStructure
+class Oauth2AccessCodeSecurity extends ClassStructure
 {
-    const BASIC = 'basic';
+    const OAUTH2 = 'oauth2';
+
+    const ACCESS_CODE = 'accessCode';
 
     const X_PROPERTY_PATTERN = '^x-';
 
     /** @var string */
     public $type;
+
+    /** @var string */
+    public $flow;
+
+    /** @var string[] */
+    public $scopes;
+
+    /** @var string */
+    public $authorizationUrl;
+
+    /** @var string */
+    public $tokenUrl;
 
     /** @var string */
     public $description;
@@ -37,8 +51,19 @@ class BasicAuthenticationSecurity extends ClassStructure
     {
         $properties->type = Schema::string();
         $properties->type->enum = array(
-            self::BASIC,
+            self::OAUTH2,
         );
+        $properties->flow = Schema::string();
+        $properties->flow->enum = array(
+            self::ACCESS_CODE,
+        );
+        $properties->scopes = Schema::object();
+        $properties->scopes->additionalProperties = Schema::string();
+        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
+        $properties->authorizationUrl = Schema::string();
+        $properties->authorizationUrl->format = "uri";
+        $properties->tokenUrl = Schema::string();
+        $properties->tokenUrl->format = "uri";
         $properties->description = Schema::string();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
@@ -50,8 +75,11 @@ class BasicAuthenticationSecurity extends ClassStructure
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
             0 => 'type',
+            1 => 'flow',
+            2 => 'authorizationUrl',
+            3 => 'tokenUrl',
         );
-        $ownerSchema->setFromRef('#/definitions/basicAuthenticationSecurity');
+        $ownerSchema->setFromRef('#/definitions/oauth2AccessCodeSecurity');
     }
 
     /**
@@ -62,6 +90,54 @@ class BasicAuthenticationSecurity extends ClassStructure
     public function setType($type)
     {
         $this->type = $type;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $flow
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setFlow($flow)
+    {
+        $this->flow = $flow;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string[] $scopes
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setScopes($scopes)
+    {
+        $this->scopes = $scopes;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $authorizationUrl
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setAuthorizationUrl($authorizationUrl)
+    {
+        $this->authorizationUrl = $authorizationUrl;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $tokenUrl
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setTokenUrl($tokenUrl)
+    {
+        $this->tokenUrl = $tokenUrl;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -96,7 +172,7 @@ class BasicAuthenticationSecurity extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

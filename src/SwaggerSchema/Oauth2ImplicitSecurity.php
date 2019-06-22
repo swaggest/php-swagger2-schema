@@ -15,20 +15,30 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/tag
+ * Built from #/definitions/oauth2ImplicitSecurity
  */
-class Tag extends ClassStructure
+class Oauth2ImplicitSecurity extends ClassStructure
 {
+    const OAUTH2 = 'oauth2';
+
+    const IMPLICIT = 'implicit';
+
     const X_PROPERTY_PATTERN = '^x-';
 
     /** @var string */
-    public $name;
+    public $type;
+
+    /** @var string */
+    public $flow;
+
+    /** @var string[] */
+    public $scopes;
+
+    /** @var string */
+    public $authorizationUrl;
 
     /** @var string */
     public $description;
-
-    /** @var ExternalDocs information about external documentation */
-    public $externalDocs;
 
     /**
      * @param Properties|static $properties
@@ -36,9 +46,20 @@ class Tag extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->name = Schema::string();
+        $properties->type = Schema::string();
+        $properties->type->enum = array(
+            self::OAUTH2,
+        );
+        $properties->flow = Schema::string();
+        $properties->flow->enum = array(
+            self::IMPLICIT,
+        );
+        $properties->scopes = Schema::object();
+        $properties->scopes->additionalProperties = Schema::string();
+        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
+        $properties->authorizationUrl = Schema::string();
+        $properties->authorizationUrl->format = "uri";
         $properties->description = Schema::string();
-        $properties->externalDocs = ExternalDocs::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -48,19 +69,57 @@ class Tag extends ClassStructure
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
-            0 => 'name',
+            0 => 'type',
+            1 => 'flow',
+            2 => 'authorizationUrl',
         );
-        $ownerSchema->setFromRef('#/definitions/tag');
+        $ownerSchema->setFromRef('#/definitions/oauth2ImplicitSecurity');
     }
 
     /**
-     * @param string $name
+     * @param string $type
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setName($name)
+    public function setType($type)
     {
-        $this->name = $name;
+        $this->type = $type;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $flow
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setFlow($flow)
+    {
+        $this->flow = $flow;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string[] $scopes
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setScopes($scopes)
+    {
+        $this->scopes = $scopes;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $authorizationUrl
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setAuthorizationUrl($authorizationUrl)
+    {
+        $this->authorizationUrl = $authorizationUrl;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -73,18 +132,6 @@ class Tag extends ClassStructure
     public function setDescription($description)
     {
         $this->description = $description;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param ExternalDocs $externalDocs information about external documentation
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setExternalDocs(ExternalDocs $externalDocs)
-    {
-        $this->externalDocs = $externalDocs;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -107,7 +154,7 @@ class Tag extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

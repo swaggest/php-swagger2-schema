@@ -16,17 +16,19 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/primitivesItems
+ * Built from #/definitions/headerParameterSubSchema
  */
-class PrimitivesItems extends ClassStructure implements SchemaExporter
+class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
 {
+    const HEADER = 'header';
+
     const STRING = 'string';
 
     const NUMBER = 'number';
 
-    const INTEGER = 'integer';
-
     const BOOLEAN = 'boolean';
+
+    const INTEGER = 'integer';
 
     const _ARRAY = 'array';
 
@@ -40,6 +42,18 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
 
     const X_PROPERTY_PATTERN = '^x-';
 
+    /** @var bool Determines whether or not this parameter is required or optional. */
+    public $required;
+
+    /** @var string Determines the location of the parameter. */
+    public $in;
+
+    /** @var string A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed. */
+    public $description;
+
+    /** @var string The name of the parameter. */
+    public $name;
+
     /** @var string */
     public $type;
 
@@ -52,6 +66,7 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
     /** @var string */
     public $collectionFormat;
 
+    /** @var mixed */
     public $default;
 
     /** @var float */
@@ -96,12 +111,24 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
+        $properties->required = Schema::boolean();
+        $properties->required->description = "Determines whether or not this parameter is required or optional.";
+        $properties->required->default = false;
+        $properties->in = Schema::string();
+        $properties->in->enum = array(
+            self::HEADER,
+        );
+        $properties->in->description = "Determines the location of the parameter.";
+        $properties->description = Schema::string();
+        $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
+        $properties->name = Schema::string();
+        $properties->name->description = "The name of the parameter.";
         $properties->type = Schema::string();
         $properties->type->enum = array(
             self::STRING,
             self::NUMBER,
-            self::INTEGER,
             self::BOOLEAN,
+            self::INTEGER,
             self::_ARRAY,
         );
         $properties->format = Schema::string();
@@ -161,7 +188,7 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
         $properties->multipleOf->minimum = 0;
         $properties->multipleOf->exclusiveMinimum = true;
         $properties->multipleOf->setFromRef('#/definitions/multipleOf');
-        $ownerSchema->type = 'object';
+        $ownerSchema = new Schema();
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
         $patternProperty->additionalProperties = true;
@@ -169,8 +196,56 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->setFromRef('#/definitions/primitivesItems');
+        $ownerSchema->setFromRef('#/definitions/headerParameterSubSchema');
     }
+
+    /**
+     * @param bool $required Determines whether or not this parameter is required or optional.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $in Determines the location of the parameter.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setIn($in)
+    {
+        $this->in = $in;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $name The name of the parameter.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
 
     /**
      * @param string $type
@@ -221,7 +296,7 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param $default
+     * @param mixed $default
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -394,7 +469,7 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart
@@ -416,6 +491,7 @@ class PrimitivesItems extends ClassStructure implements SchemaExporter
     function exportSchema()
     {
         $schema = new Schema();
+        $schema->description = $this->description;
         $schema->type = $this->type;
         $schema->format = $this->format;
         $schema->items = $this->items;

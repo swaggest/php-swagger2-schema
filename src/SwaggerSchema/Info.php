@@ -15,30 +15,30 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/oauth2ImplicitSecurity
+ * General information about the API.
+ * Built from #/definitions/info
  */
-class Oauth2ImplicitSecurity extends ClassStructure
+class Info extends ClassStructure
 {
-    const OAUTH2 = 'oauth2';
-
-    const IMPLICIT = 'implicit';
-
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string */
-    public $type;
+    /** @var string A unique and precise title of the API. */
+    public $title;
 
-    /** @var string */
-    public $flow;
+    /** @var string A semantic version number of the API. */
+    public $version;
 
-    /** @var string[] */
-    public $scopes;
-
-    /** @var string */
-    public $authorizationUrl;
-
-    /** @var string */
+    /** @var string A longer description of the API. Should be different from the title.  GitHub Flavored Markdown is allowed. */
     public $description;
+
+    /** @var string The terms of service for the API. */
+    public $termsOfService;
+
+    /** @var Contact Contact information for the owners of the API. */
+    public $contact;
+
+    /** @var License */
+    public $license;
 
     /**
      * @param Properties|static $properties
@@ -46,20 +46,16 @@ class Oauth2ImplicitSecurity extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->type = Schema::string();
-        $properties->type->enum = array(
-            self::OAUTH2,
-        );
-        $properties->flow = Schema::string();
-        $properties->flow->enum = array(
-            self::IMPLICIT,
-        );
-        $properties->scopes = Schema::object();
-        $properties->scopes->additionalProperties = Schema::string();
-        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
-        $properties->authorizationUrl = Schema::string();
-        $properties->authorizationUrl->format = "uri";
+        $properties->title = Schema::string();
+        $properties->title->description = "A unique and precise title of the API.";
+        $properties->version = Schema::string();
+        $properties->version->description = "A semantic version number of the API.";
         $properties->description = Schema::string();
+        $properties->description->description = "A longer description of the API. Should be different from the title.  GitHub Flavored Markdown is allowed.";
+        $properties->termsOfService = Schema::string();
+        $properties->termsOfService->description = "The terms of service for the API.";
+        $properties->contact = Contact::schema();
+        $properties->license = License::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -68,70 +64,82 @@ class Oauth2ImplicitSecurity extends ClassStructure
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $ownerSchema->description = "General information about the API.";
         $ownerSchema->required = array(
-            0 => 'type',
-            1 => 'flow',
-            2 => 'authorizationUrl',
+            0 => 'version',
+            1 => 'title',
         );
-        $ownerSchema->setFromRef('#/definitions/oauth2ImplicitSecurity');
+        $ownerSchema->setFromRef('#/definitions/info');
     }
 
     /**
-     * @param string $type
+     * @param string $title A unique and precise title of the API.
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setType($type)
+    public function setTitle($title)
     {
-        $this->type = $type;
+        $this->title = $title;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $flow
+     * @param string $version A semantic version number of the API.
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setFlow($flow)
+    public function setVersion($version)
     {
-        $this->flow = $flow;
+        $this->version = $version;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string[] $scopes
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setScopes($scopes)
-    {
-        $this->scopes = $scopes;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $authorizationUrl
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setAuthorizationUrl($authorizationUrl)
-    {
-        $this->authorizationUrl = $authorizationUrl;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $description
+     * @param string $description A longer description of the API. Should be different from the title.  GitHub Flavored Markdown is allowed.
      * @return $this
      * @codeCoverageIgnoreStart
      */
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $termsOfService The terms of service for the API.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setTermsOfService($termsOfService)
+    {
+        $this->termsOfService = $termsOfService;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param Contact $contact Contact information for the owners of the API.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setContact(Contact $contact)
+    {
+        $this->contact = $contact;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param License $license
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setLicense(License $license)
+    {
+        $this->license = $license;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -154,7 +162,7 @@ class Oauth2ImplicitSecurity extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

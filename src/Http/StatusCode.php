@@ -1,6 +1,6 @@
 <?php
 
-namespace Swaggest\SwaggerSchema\Http;
+namespace Swaggest\SwaggerHttp;
 
 
 use Swaggest\JsonSchema\Constraint\Properties;

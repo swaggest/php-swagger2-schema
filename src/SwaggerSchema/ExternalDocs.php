@@ -15,30 +15,18 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/oauth2PasswordSecurity
+ * information about external documentation
+ * Built from #/definitions/externalDocs
  */
-class Oauth2PasswordSecurity extends ClassStructure
+class ExternalDocs extends ClassStructure
 {
-    const OAUTH2 = 'oauth2';
-
-    const PASSWORD = 'password';
-
     const X_PROPERTY_PATTERN = '^x-';
 
     /** @var string */
-    public $type;
-
-    /** @var string */
-    public $flow;
-
-    /** @var string[] */
-    public $scopes;
-
-    /** @var string */
-    public $tokenUrl;
-
-    /** @var string */
     public $description;
+
+    /** @var string */
+    public $url;
 
     /**
      * @param Properties|static $properties
@@ -46,20 +34,9 @@ class Oauth2PasswordSecurity extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->type = Schema::string();
-        $properties->type->enum = array(
-            self::OAUTH2,
-        );
-        $properties->flow = Schema::string();
-        $properties->flow->enum = array(
-            self::PASSWORD,
-        );
-        $properties->scopes = Schema::object();
-        $properties->scopes->additionalProperties = Schema::string();
-        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
-        $properties->tokenUrl = Schema::string();
-        $properties->tokenUrl->format = "uri";
         $properties->description = Schema::string();
+        $properties->url = Schema::string();
+        $properties->url->format = "uri";
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -68,61 +45,12 @@ class Oauth2PasswordSecurity extends ClassStructure
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $ownerSchema->description = "information about external documentation";
         $ownerSchema->required = array(
-            0 => 'type',
-            1 => 'flow',
-            2 => 'tokenUrl',
+            0 => 'url',
         );
-        $ownerSchema->setFromRef('#/definitions/oauth2PasswordSecurity');
+        $ownerSchema->setFromRef('#/definitions/externalDocs');
     }
-
-    /**
-     * @param string $type
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $flow
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setFlow($flow)
-    {
-        $this->flow = $flow;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string[] $scopes
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setScopes($scopes)
-    {
-        $this->scopes = $scopes;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $tokenUrl
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setTokenUrl($tokenUrl)
-    {
-        $this->tokenUrl = $tokenUrl;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
 
     /**
      * @param string $description
@@ -132,6 +60,18 @@ class Oauth2PasswordSecurity extends ClassStructure
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $url
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -154,7 +94,7 @@ class Oauth2PasswordSecurity extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

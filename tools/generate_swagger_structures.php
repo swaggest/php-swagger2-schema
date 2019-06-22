@@ -30,7 +30,7 @@ $options->setRemoteRefProvider($refProvider);
 
 $swaggerSchema = Schema::import($schemaData, $options);
 
-$appPath = realpath(__DIR__ . '/../src/');
+$appPath = realpath(__DIR__ . '/../src/SwaggerSchema/');
 $appNs = 'Swaggest\SwaggerSchema';
 
 $app = new PhpApp();

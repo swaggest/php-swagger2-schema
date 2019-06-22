@@ -15,26 +15,16 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/apiKeySecurity
+ * Built from #/definitions/basicAuthenticationSecurity
  */
-class ApiKeySecurity extends ClassStructure
+class BasicAuthenticationSecurity extends ClassStructure
 {
-    const API_KEY = 'apiKey';
-
-    const HEADER = 'header';
-
-    const QUERY = 'query';
+    const BASIC = 'basic';
 
     const X_PROPERTY_PATTERN = '^x-';
 
     /** @var string */
     public $type;
-
-    /** @var string */
-    public $name;
-
-    /** @var string */
-    public $in;
 
     /** @var string */
     public $description;
@@ -47,13 +37,7 @@ class ApiKeySecurity extends ClassStructure
     {
         $properties->type = Schema::string();
         $properties->type->enum = array(
-            self::API_KEY,
-        );
-        $properties->name = Schema::string();
-        $properties->in = Schema::string();
-        $properties->in->enum = array(
-            self::HEADER,
-            self::QUERY,
+            self::BASIC,
         );
         $properties->description = Schema::string();
         $ownerSchema->type = 'object';
@@ -66,10 +50,8 @@ class ApiKeySecurity extends ClassStructure
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
             0 => 'type',
-            1 => 'name',
-            2 => 'in',
         );
-        $ownerSchema->setFromRef('#/definitions/apiKeySecurity');
+        $ownerSchema->setFromRef('#/definitions/basicAuthenticationSecurity');
     }
 
     /**
@@ -80,30 +62,6 @@ class ApiKeySecurity extends ClassStructure
     public function setType($type)
     {
         $this->type = $type;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $name
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $in
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setIn($in)
-    {
-        $this->in = $in;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -138,7 +96,7 @@ class ApiKeySecurity extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

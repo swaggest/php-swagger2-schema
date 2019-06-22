@@ -15,22 +15,28 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/response
+ * Built from #/definitions/bodyParameter
  */
-class Response extends ClassStructure
+class BodyParameter extends ClassStructure
 {
+    const BODY = 'body';
+
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string */
+    /** @var string A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed. */
     public $description;
 
-    /** @var DefinitionsSchema|FileSchema */
+    /** @var string The name of the parameter. */
+    public $name;
+
+    /** @var string Determines the location of the parameter. */
+    public $in;
+
+    /** @var bool Determines whether or not this parameter is required or optional. */
+    public $required;
+
+    /** @var DefinitionsSchema A deterministic version of a JSON Schema object. */
     public $schema;
-
-    /** @var Header[] */
-    public $headers;
-
-    public $examples;
 
     /**
      * @param Properties|static $properties
@@ -39,15 +45,18 @@ class Response extends ClassStructure
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->description = Schema::string();
-        $properties->schema = new Schema();
-        $properties->schema->oneOf[0] = DefinitionsSchema::schema();
-        $properties->schema->oneOf[1] = FileSchema::schema();
-        $properties->headers = Schema::object();
-        $properties->headers->additionalProperties = Header::schema();
-        $properties->headers->setFromRef('#/definitions/headers');
-        $properties->examples = Schema::object();
-        $properties->examples->additionalProperties = true;
-        $properties->examples->setFromRef('#/definitions/examples');
+        $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
+        $properties->name = Schema::string();
+        $properties->name->description = "The name of the parameter.";
+        $properties->in = Schema::string();
+        $properties->in->enum = array(
+            self::BODY,
+        );
+        $properties->in->description = "Determines the location of the parameter.";
+        $properties->required = Schema::boolean();
+        $properties->required->description = "Determines whether or not this parameter is required or optional.";
+        $properties->required->default = false;
+        $properties->schema = DefinitionsSchema::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -57,13 +66,15 @@ class Response extends ClassStructure
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
-            0 => 'description',
+            0 => 'name',
+            1 => 'in',
+            2 => 'schema',
         );
-        $ownerSchema->setFromRef('#/definitions/response');
+        $ownerSchema->setFromRef('#/definitions/bodyParameter');
     }
 
     /**
-     * @param string $description
+     * @param string $description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -75,37 +86,49 @@ class Response extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param DefinitionsSchema|FileSchema $schema
+     * @param string $name The name of the parameter.
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setSchema($schema)
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $in Determines the location of the parameter.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setIn($in)
+    {
+        $this->in = $in;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param bool $required Determines whether or not this parameter is required or optional.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param DefinitionsSchema $schema A deterministic version of a JSON Schema object.
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setSchema(DefinitionsSchema $schema)
     {
         $this->schema = $schema;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param Header[] $headers
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param $examples
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setExamples($examples)
-    {
-        $this->examples = $examples;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -128,7 +151,7 @@ class Response extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

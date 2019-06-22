@@ -15,28 +15,26 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/bodyParameter
+ * Built from #/definitions/xml
  */
-class BodyParameter extends ClassStructure
+class Xml extends ClassStructure
 {
-    const BODY = 'body';
-
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed. */
-    public $description;
-
-    /** @var string The name of the parameter. */
+    /** @var string */
     public $name;
 
-    /** @var string Determines the location of the parameter. */
-    public $in;
+    /** @var string */
+    public $namespace;
 
-    /** @var bool Determines whether or not this parameter is required or optional. */
-    public $required;
+    /** @var string */
+    public $prefix;
 
-    /** @var DefinitionsSchema A deterministic version of a JSON Schema object. */
-    public $schema;
+    /** @var bool */
+    public $attribute;
+
+    /** @var bool */
+    public $wrapped;
 
     /**
      * @param Properties|static $properties
@@ -44,19 +42,13 @@ class BodyParameter extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->description = Schema::string();
-        $properties->description->description = "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.";
         $properties->name = Schema::string();
-        $properties->name->description = "The name of the parameter.";
-        $properties->in = Schema::string();
-        $properties->in->enum = array(
-            self::BODY,
-        );
-        $properties->in->description = "Determines the location of the parameter.";
-        $properties->required = Schema::boolean();
-        $properties->required->description = "Determines whether or not this parameter is required or optional.";
-        $properties->required->default = false;
-        $properties->schema = DefinitionsSchema::schema();
+        $properties->namespace = Schema::string();
+        $properties->prefix = Schema::string();
+        $properties->attribute = Schema::boolean();
+        $properties->attribute->default = false;
+        $properties->wrapped = Schema::boolean();
+        $properties->wrapped->default = false;
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -65,28 +57,11 @@ class BodyParameter extends ClassStructure
         $patternProperty->description = "Any property starting with x- is valid.";
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->required = array(
-            0 => 'name',
-            1 => 'in',
-            2 => 'schema',
-        );
-        $ownerSchema->setFromRef('#/definitions/bodyParameter');
+        $ownerSchema->setFromRef('#/definitions/xml');
     }
 
     /**
-     * @param string $description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $name The name of the parameter.
+     * @param string $name
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -98,37 +73,49 @@ class BodyParameter extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $in Determines the location of the parameter.
+     * @param string $namespace
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setIn($in)
+    public function setNamespace($namespace)
     {
-        $this->in = $in;
+        $this->namespace = $namespace;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param bool $required Determines whether or not this parameter is required or optional.
+     * @param string $prefix
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setRequired($required)
+    public function setPrefix($prefix)
     {
-        $this->required = $required;
+        $this->prefix = $prefix;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param DefinitionsSchema $schema A deterministic version of a JSON Schema object.
+     * @param bool $attribute
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setSchema(DefinitionsSchema $schema)
+    public function setAttribute($attribute)
     {
-        $this->schema = $schema;
+        $this->attribute = $attribute;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param bool $wrapped
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setWrapped($wrapped)
+    {
+        $this->wrapped = $wrapped;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -151,7 +138,7 @@ class BodyParameter extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

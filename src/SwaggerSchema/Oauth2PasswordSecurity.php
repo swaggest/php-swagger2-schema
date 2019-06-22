@@ -15,17 +15,30 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/license
+ * Built from #/definitions/oauth2PasswordSecurity
  */
-class License extends ClassStructure
+class Oauth2PasswordSecurity extends ClassStructure
 {
+    const OAUTH2 = 'oauth2';
+
+    const PASSWORD = 'password';
+
     const X_PROPERTY_PATTERN = '^x-';
 
-    /** @var string The name of the license type. It's encouraged to use an OSI compatible license. */
-    public $name;
+    /** @var string */
+    public $type;
 
-    /** @var string The URL pointing to the license. */
-    public $url;
+    /** @var string */
+    public $flow;
+
+    /** @var string[] */
+    public $scopes;
+
+    /** @var string */
+    public $tokenUrl;
+
+    /** @var string */
+    public $description;
 
     /**
      * @param Properties|static $properties
@@ -33,11 +46,20 @@ class License extends ClassStructure
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $properties->name = Schema::string();
-        $properties->name->description = "The name of the license type. It's encouraged to use an OSI compatible license.";
-        $properties->url = Schema::string();
-        $properties->url->description = "The URL pointing to the license.";
-        $properties->url->format = "uri";
+        $properties->type = Schema::string();
+        $properties->type->enum = array(
+            self::OAUTH2,
+        );
+        $properties->flow = Schema::string();
+        $properties->flow->enum = array(
+            self::PASSWORD,
+        );
+        $properties->scopes = Schema::object();
+        $properties->scopes->additionalProperties = Schema::string();
+        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
+        $properties->tokenUrl = Schema::string();
+        $properties->tokenUrl->format = "uri";
+        $properties->description = Schema::string();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
         $patternProperty = new Schema();
@@ -47,31 +69,69 @@ class License extends ClassStructure
         $patternProperty->setFromRef('#/definitions/vendorExtension');
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
-            0 => 'name',
+            0 => 'type',
+            1 => 'flow',
+            2 => 'tokenUrl',
         );
-        $ownerSchema->setFromRef('#/definitions/license');
+        $ownerSchema->setFromRef('#/definitions/oauth2PasswordSecurity');
     }
 
     /**
-     * @param string $name The name of the license type. It's encouraged to use an OSI compatible license.
+     * @param string $type
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setName($name)
+    public function setType($type)
     {
-        $this->name = $name;
+        $this->type = $type;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $url The URL pointing to the license.
+     * @param string $flow
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setUrl($url)
+    public function setFlow($flow)
     {
-        $this->url = $url;
+        $this->flow = $flow;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string[] $scopes
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setScopes($scopes)
+    {
+        $this->scopes = $scopes;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $tokenUrl
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setTokenUrl($tokenUrl)
+    {
+        $this->tokenUrl = $tokenUrl;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
+     * @param string $description
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -94,7 +154,7 @@ class License extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart

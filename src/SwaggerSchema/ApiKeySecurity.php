@@ -15,13 +15,15 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Built from #/definitions/oauth2ApplicationSecurity
+ * Built from #/definitions/apiKeySecurity
  */
-class Oauth2ApplicationSecurity extends ClassStructure
+class ApiKeySecurity extends ClassStructure
 {
-    const OAUTH2 = 'oauth2';
+    const API_KEY = 'apiKey';
 
-    const APPLICATION = 'application';
+    const HEADER = 'header';
+
+    const QUERY = 'query';
 
     const X_PROPERTY_PATTERN = '^x-';
 
@@ -29,13 +31,10 @@ class Oauth2ApplicationSecurity extends ClassStructure
     public $type;
 
     /** @var string */
-    public $flow;
-
-    /** @var string[] */
-    public $scopes;
+    public $name;
 
     /** @var string */
-    public $tokenUrl;
+    public $in;
 
     /** @var string */
     public $description;
@@ -48,17 +47,14 @@ class Oauth2ApplicationSecurity extends ClassStructure
     {
         $properties->type = Schema::string();
         $properties->type->enum = array(
-            self::OAUTH2,
+            self::API_KEY,
         );
-        $properties->flow = Schema::string();
-        $properties->flow->enum = array(
-            self::APPLICATION,
+        $properties->name = Schema::string();
+        $properties->in = Schema::string();
+        $properties->in->enum = array(
+            self::HEADER,
+            self::QUERY,
         );
-        $properties->scopes = Schema::object();
-        $properties->scopes->additionalProperties = Schema::string();
-        $properties->scopes->setFromRef('#/definitions/oauth2Scopes');
-        $properties->tokenUrl = Schema::string();
-        $properties->tokenUrl->format = "uri";
         $properties->description = Schema::string();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
@@ -70,10 +66,10 @@ class Oauth2ApplicationSecurity extends ClassStructure
         $ownerSchema->setPatternProperty('^x-', $patternProperty);
         $ownerSchema->required = array(
             0 => 'type',
-            1 => 'flow',
-            2 => 'tokenUrl',
+            1 => 'name',
+            2 => 'in',
         );
-        $ownerSchema->setFromRef('#/definitions/oauth2ApplicationSecurity');
+        $ownerSchema->setFromRef('#/definitions/apiKeySecurity');
     }
 
     /**
@@ -89,37 +85,25 @@ class Oauth2ApplicationSecurity extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string $flow
+     * @param string $name
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setFlow($flow)
+    public function setName($name)
     {
-        $this->flow = $flow;
+        $this->name = $name;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string[] $scopes
+     * @param string $in
      * @return $this
      * @codeCoverageIgnoreStart
      */
-    public function setScopes($scopes)
+    public function setIn($in)
     {
-        $this->scopes = $scopes;
-        return $this;
-    }
-    /** @codeCoverageIgnoreEnd */
-
-    /**
-     * @param string $tokenUrl
-     * @return $this
-     * @codeCoverageIgnoreStart
-     */
-    public function setTokenUrl($tokenUrl)
-    {
-        $this->tokenUrl = $tokenUrl;
+        $this->in = $in;
         return $this;
     }
     /** @codeCoverageIgnoreEnd */
@@ -154,7 +138,7 @@ class Oauth2ApplicationSecurity extends ClassStructure
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      * @return self
      * @throws InvalidValue
      * @codeCoverageIgnoreStart
