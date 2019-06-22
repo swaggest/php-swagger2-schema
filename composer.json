@@ -9,7 +9,7 @@
   "require-dev": {
     "phpunit/phpunit": "4.8.35",
     "phpunit/php-code-coverage": "2.2.4",
-    "swaggest/php-code-builder": "^0.2"
+    "swaggest/php-code-builder": "^0.2.6"
   },
   "license": "MIT",
   "authors": [
@@ -24,7 +24,8 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "Swaggest\\SwaggerSchema\\": "src/"
+      "Swaggest\\SwaggerHttp\\": "src/Http/",
+      "Swaggest\\SwaggerSchema\\": "src/SwaggerSchema/"
     }
   },
   "autoload-dev": {
