@@ -55,6 +55,7 @@ class PathItem extends ClassStructure
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->ref = Schema::string();
+        $properties->ref->format = "uri-reference";
         $ownerSchema->addPropertyMapping('$ref', self::names()->ref);
         $properties->get = Operation::schema();
         $properties->put = Operation::schema();
