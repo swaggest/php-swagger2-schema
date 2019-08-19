@@ -313,7 +313,8 @@
       },
       "properties": {
         "$ref": {
-          "type": "string"
+          "type": "string",
+          "format": "uri-reference"
         },
         "get": {
           "$ref": "#/definitions/operation"
@@ -942,7 +943,8 @@
       },
       "properties": {
         "$ref": {
-          "type": "string"
+          "type": "string",
+          "format": "uri-reference"
         },
         "format": {
           "type": "string"
@@ -1599,7 +1601,8 @@
       "additionalProperties": false,
       "properties": {
         "$ref": {
-          "type": "string"
+          "type": "string",
+          "format": "uri-reference"
         }
       }
     }
