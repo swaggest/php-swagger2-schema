@@ -6,6 +6,7 @@
 
 namespace Swaggest\SwaggerSchema;
 
+use Swaggest\JsonSchema\Constraint\Format;
 use Swaggest\JsonSchema\Constraint\Properties;
 use Swaggest\JsonSchema\Exception\StringException;
 use Swaggest\JsonSchema\Helper;
@@ -135,6 +136,7 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     {
         $properties->ref = Schema::string();
         $ownerSchema->addPropertyMapping('$ref', self::names()->ref);
+        $properties->ref->format = Format::URI_REFERENCE;
         $properties->format = Schema::string();
         $properties->title = Schema::string();
         $properties->title->setFromRef('http://json-schema.org/draft-04/schema#/properties/title');
@@ -666,11 +668,28 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * Schema storage keeps exported schemas to avoid infinite cycle recursions.
+     * @var \SplObjectStorage
+     */
+    private static $schemaStorage;
+
+    /**
      * @return Schema
      */
     function exportSchema()
     {
-        $schema = new Schema();
+
+        if (null === self::$schemaStorage) {
+            self::$schemaStorage = new \SplObjectStorage();
+        }
+
+        if (self::$schemaStorage->contains($this)) {
+            return self::$schemaStorage->offsetGet($this);
+        } else {
+            $schema = new Schema();
+            self::$schemaStorage->attach($this, $schema);
+        }
+
         $schema->ref = $this->ref;
         $schema->format = $this->format;
         $schema->title = $this->title;
