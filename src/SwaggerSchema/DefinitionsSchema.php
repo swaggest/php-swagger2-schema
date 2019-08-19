@@ -6,7 +6,7 @@
 
 namespace Swaggest\SwaggerSchema;
 
-use Swaggest\JsonSchema\Constraint\Format;
+use SplObjectStorage;
 use Swaggest\JsonSchema\Constraint\Properties;
 use Swaggest\JsonSchema\Exception\StringException;
 use Swaggest\JsonSchema\Helper;
@@ -128,6 +128,9 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     /** @var mixed */
     public $example;
 
+    /** @var SplObjectStorage Schema storage keeps exported schemas to avoid infinite cycle recursions. */
+    private static $schemaStorage;
+
     /**
      * @param Properties|static $properties
      * @param Schema $ownerSchema
@@ -135,8 +138,8 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->ref = Schema::string();
+        $properties->ref->format = "uri-reference";
         $ownerSchema->addPropertyMapping('$ref', self::names()->ref);
-        $properties->ref->format = Format::URI_REFERENCE;
         $properties->format = Schema::string();
         $properties->title = Schema::string();
         $properties->title->setFromRef('http://json-schema.org/draft-04/schema#/properties/title');
@@ -668,19 +671,12 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * Schema storage keeps exported schemas to avoid infinite cycle recursions.
-     * @var \SplObjectStorage
-     */
-    private static $schemaStorage;
-
-    /**
      * @return Schema
      */
     function exportSchema()
     {
-
         if (null === self::$schemaStorage) {
-            self::$schemaStorage = new \SplObjectStorage();
+            self::$schemaStorage = new SplObjectStorage();
         }
 
         if (self::$schemaStorage->contains($this)) {
@@ -689,7 +685,6 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
             $schema = new Schema();
             self::$schemaStorage->attach($this, $schema);
         }
-
         $schema->ref = $this->ref;
         $schema->format = $this->format;
         $schema->title = $this->title;
