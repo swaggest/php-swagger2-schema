@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f23113cd11391d4772e70e06658b4a8",
+    "content-hash": "5130558f019d48b95f6cb641ebcc2850",
     "packages": [
         {
             "name": "phplang/scope-exit",
@@ -93,16 +93,16 @@
         },
         {
             "name": "swaggest/json-schema",
-            "version": "v0.12.15",
+            "version": "v0.12.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swaggest/php-json-schema.git",
-                "reference": "848546588f927ca60793d2e8b948a41ce179922b"
+                "reference": "fbe3d32957170f4e3814fa5323457534a813d347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/php-json-schema/zipball/848546588f927ca60793d2e8b948a41ce179922b",
-                "reference": "848546588f927ca60793d2e8b948a41ce179922b",
+                "url": "https://api.github.com/repos/swaggest/php-json-schema/zipball/fbe3d32957170f4e3814fa5323457534a813d347",
+                "reference": "fbe3d32957170f4e3814fa5323457534a813d347",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 }
             ],
             "description": "High definition PHP structures with JSON-schema based validation",
-            "time": "2019-08-19T14:32:15+00:00"
+            "time": "2019-08-20T13:21:25+00:00"
         }
     ],
     "packages-dev": [
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "swaggest/php-code-builder",
-            "version": "v0.2.9",
+            "version": "v0.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swaggest/php-code-builder.git",
-                "reference": "aa5f2760a3f7b2a07d9e267e6a3cff8b032a48f5"
+                "reference": "b44d8e4378e48ecaca9d455fa1432b89767fcb99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/php-code-builder/zipball/aa5f2760a3f7b2a07d9e267e6a3cff8b032a48f5",
-                "reference": "aa5f2760a3f7b2a07d9e267e6a3cff8b032a48f5",
+                "url": "https://api.github.com/repos/swaggest/php-code-builder/zipball/b44d8e4378e48ecaca9d455fa1432b89767fcb99",
+                "reference": "b44d8e4378e48ecaca9d455fa1432b89767fcb99",
                 "shasum": ""
             },
             "require": {
@@ -1333,7 +1333,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2019-08-19T10:02:02+00:00"
+            "time": "2019-08-20T12:07:52+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
