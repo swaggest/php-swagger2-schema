@@ -33,6 +33,8 @@ class Reference extends ClassStructure
         $patternProperty = Schema::string();
         $patternProperty->format = "uri-reference";
         $ownerSchema->setPatternProperty('^\\$ref$', $patternProperty);
+        $ownerSchema->not = new Schema();
+        $ownerSchema->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
         $ownerSchema->required = array(
             '$ref',
         );

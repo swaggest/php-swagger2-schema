@@ -52,6 +52,9 @@
   "additionalProperties": false,
   "definitions": {
     "Reference": {
+      "not": {
+        "description": "This schema always fails to disable oneOf references in favor of sibling schema"
+      },
       "type": "object",
       "required": [
         "$ref"

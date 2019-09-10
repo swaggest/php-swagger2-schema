@@ -3,6 +3,8 @@
 namespace Swaggest\SwaggerSchema;
 
 use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Exception;
+use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\RemoteRef\Preloaded;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\PhpCodeBuilder\App\PhpApp;
@@ -11,6 +13,10 @@ use Swaggest\PhpCodeBuilder\JsonSchema\PhpBuilder;
 use Swaggest\PhpCodeBuilder\JsonSchema\SchemaExporterInterface;
 use Swaggest\PhpCodeBuilder\PhpClass;
 use Swaggest\PhpCodeBuilder\PhpCode;
+use Swaggest\PhpCodeBuilder\PhpFlags;
+use Swaggest\PhpCodeBuilder\PhpFunction;
+use Swaggest\PhpCodeBuilder\PhpNamedVar;
+use Swaggest\PhpCodeBuilder\PhpStdType;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
@@ -57,6 +63,21 @@ $builder->classCreatedHook = new ClassHookCallback(function (PhpClass $class, $p
     $class->setNamespace($appNs);
     if ('#' === $path) {
         $class->setName('OpenAPI3Schema');
+        $import = new PhpFunction('import', PhpFlags::VIS_PUBLIC, true);
+        $import->addArgument(new PhpNamedVar('data'));
+        $import->addArgument(new PhpNamedVar('options', PhpClass::byFQN(Context::class), true, null));
+        $import->setResult(PhpStdType::tStatic());
+        $import->addThrows(PhpClass::byFQN(InvalidValue::class));
+        $import->addThrows(PhpClass::byFQN(Exception::class));
+        $import->setBody(<<<'PHP'
+if ($options == null) {
+    $options = new Context();
+}
+$options->dereference = true;
+return static::schema()->in($data, $options);
+PHP
+);
+        $class->addMethod($import);
     } elseif ('#/definitions/' === substr($path, 0, strlen('#/definitions/'))) {
         $className = PhpCode::makePhpClassName(substr($path, strlen('#/definitions/')));
         if ($className === 'Schema') {

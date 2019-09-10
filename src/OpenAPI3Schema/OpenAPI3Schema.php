@@ -7,6 +7,8 @@
 namespace Swaggest\OpenAPI3Schema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
+use Swaggest\JsonSchema\Context;
+use Swaggest\JsonSchema\Exception;
 use Swaggest\JsonSchema\Exception\StringException;
 use Swaggest\JsonSchema\Helper;
 use Swaggest\JsonSchema\InvalidValue;
@@ -44,6 +46,22 @@ class OpenAPI3Schema extends ClassStructure
 
     /** @var Components */
     public $components;
+
+    /**
+     * @param \stdClass $data
+     * @param Context $options
+     * @return static
+     * @throws InvalidValue
+     * @throws Exception
+     */
+    public static function import($data, Context $options = NULL)
+    {
+        if ($options == null) {
+            $options = new Context();
+        }
+        $options->dereference = true;
+        return static::schema()->in($data, $options);
+    }
 
     /**
      * @param Properties|static $properties
