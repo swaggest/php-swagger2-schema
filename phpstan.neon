@@ -2,3 +2,4 @@ parameters:
 	ignoreErrors:
 	- '#Access to an undefined property static\(.+\)\|Swaggest\\JsonSchema\\Constraint\\Properties\:\:#'
 	- '#Access to an undefined property static\(.+\)|Swaggest\JsonSchema\NameMirror\:\:#'
+	- '#Property Swaggest\\JsonSchema\\JsonSchema::\$required \(array<string>\) does not accept#' # ignore property name references in required
