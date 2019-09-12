@@ -7,30 +7,42 @@
 namespace Swaggest\OpenAPI3Schema;
 
 use Swaggest\JsonSchema\Constraint\Properties;
-use Swaggest\JsonSchema\Context;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Example and examples are mutually exclusive
- * Built from #/definitions/ExampleXORExamples
- * @method static mixed import($data, Context $options = null)
+ * Bearer
  */
-class ExampleXORExamples extends ClassStructure
+class HTTPSecuritySchemeBearer extends ClassStructure
 {
+    const BEARER = 'bearer';
+
+    /** @var mixed */
+    public $scheme;
+
     /**
      * @param Properties|static $properties
      * @param Schema $ownerSchema
      */
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
-        $ownerSchema->not = new Schema();
-        $ownerSchema->not->required = array(
-            self::names()->example,
-            self::names()->examples,
+        $properties->scheme = new Schema();
+        $properties->scheme->enum = array(
+            self::BEARER,
         );
-        $ownerSchema->description = "Example and examples are mutually exclusive";
-        $ownerSchema->setFromRef('#/definitions/ExampleXORExamples');
+        $ownerSchema->description = "Bearer";
     }
+
+    /**
+     * @param mixed $scheme
+     * @return $this
+     * @codeCoverageIgnoreStart
+     */
+    public function setScheme($scheme)
+    {
+        $this->scheme = $scheme;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
 }

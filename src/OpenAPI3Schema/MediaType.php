@@ -43,19 +43,47 @@ class MediaType extends ClassStructure
     {
         $properties->schema = new Schema();
         $properties->schema->oneOf[0] = DefinitionsSchema::schema();
-        $properties->schema->oneOf[1] = Reference::schema();
+        $propertiesSchemaOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesSchemaOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesSchemaOneOf1->not = new Schema();
+        $propertiesSchemaOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesSchemaOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesSchemaOneOf1->setFromRef('#/definitions/Reference');
+        $properties->schema->oneOf[1] = $propertiesSchemaOneOf1;
         $properties->example = new Schema();
         $properties->examples = Schema::object();
         $properties->examples->additionalProperties = new Schema();
         $properties->examples->additionalProperties->oneOf[0] = Example::schema();
-        $properties->examples->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesExamplesAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesExamplesAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesExamplesAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesExamplesAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesExamplesAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesExamplesAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->examples->additionalProperties->oneOf[1] = $propertiesExamplesAdditionalPropertiesOneOf1;
         $properties->encoding = Schema::object();
         $properties->encoding->additionalProperties = Encoding::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->allOf[0] = ExampleXORExamples::schema();
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
+        $ownerSchemaAllOf0 = new Schema();
+        $ownerSchemaAllOf0->not = new Schema();
+        $ownerSchemaAllOf0->not->required = array(
+            self::names()->example,
+            self::names()->examples,
+        );
+        $ownerSchemaAllOf0->description = "Example and examples are mutually exclusive";
+        $ownerSchemaAllOf0->setFromRef('#/definitions/ExampleXORExamples');
+        $ownerSchema->allOf[0] = $ownerSchemaAllOf0;
         $ownerSchema->setFromRef('#/definitions/MediaType');
     }
 

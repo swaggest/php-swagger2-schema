@@ -43,17 +43,37 @@ class Response extends ClassStructure
         $properties->headers = Schema::object();
         $properties->headers->additionalProperties = new Schema();
         $properties->headers->additionalProperties->oneOf[0] = Header::schema();
-        $properties->headers->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesHeadersAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesHeadersAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesHeadersAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesHeadersAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesHeadersAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesHeadersAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->headers->additionalProperties->oneOf[1] = $propertiesHeadersAdditionalPropertiesOneOf1;
         $properties->content = Schema::object();
         $properties->content->additionalProperties = MediaType::schema();
         $properties->links = Schema::object();
         $properties->links->additionalProperties = new Schema();
         $properties->links->additionalProperties->oneOf[0] = Link::schema();
-        $properties->links->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesLinksAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesLinksAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesLinksAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesLinksAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesLinksAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesLinksAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->links->additionalProperties->oneOf[1] = $propertiesLinksAdditionalPropertiesOneOf1;
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->required = array(
             self::names()->description,
         );

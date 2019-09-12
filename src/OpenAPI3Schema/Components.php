@@ -27,7 +27,7 @@ class Components extends ClassStructure
     /** @var string[][]|Response[] */
     public $responses;
 
-    /** @var string[][]|Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[] */
+    /** @var string[][]|Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[] */
     public $parameters;
 
     /** @var string[][]|Example[] */
@@ -39,7 +39,7 @@ class Components extends ClassStructure
     /** @var string[][]|Header[]|mixed[] */
     public $headers;
 
-    /** @var string[][]|APIKeySecurityScheme[]|HTTPSecurityScheme[]|HTTPSecuritySchemeOneOf0[]|HTTPSecuritySchemeOneOf1[]|OAuth2SecurityScheme[]|OpenIdConnectSecurityScheme[] */
+    /** @var string[][]|APIKeySecurityScheme[]|HTTPSecurityScheme[]|HTTPSecuritySchemeBearer[]|HTTPSecuritySchemeNonBearer[]|OAuth2SecurityScheme[]|OpenIdConnectSecurityScheme[] */
     public $securitySchemes;
 
     /** @var string[][]|Link[] */
@@ -55,54 +55,155 @@ class Components extends ClassStructure
     public static function setUpProperties($properties, Schema $ownerSchema)
     {
         $properties->schemas = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = DefinitionsSchema::schema();
-        $patternProperty->oneOf[1] = Reference::schema();
-        $properties->schemas->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09->oneOf[0] = DefinitionsSchema::schema();
+        $aZAZ09OneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf1->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf1->not = new Schema();
+        $aZAZ09OneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf1->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf1->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[1] = $aZAZ09OneOf1;
+        $properties->schemas->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->responses = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Response::schema();
-        $properties->responses->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = Response::schema();
+        $properties->responses->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->parameters = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Parameter::schema();
-        $properties->parameters->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = Parameter::schema();
+        $properties->parameters->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->examples = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Example::schema();
-        $properties->examples->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = Example::schema();
+        $properties->examples->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->requestBodies = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = RequestBody::schema();
-        $properties->requestBodies->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = RequestBody::schema();
+        $properties->requestBodies->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->headers = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Header::schema();
-        $properties->headers->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = Header::schema();
+        $properties->headers->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->securitySchemes = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = SecurityScheme::schema();
-        $properties->securitySchemes->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09OneOf1 = new Schema();
+        $aZAZ09OneOf1->oneOf[0] = APIKeySecurityScheme::schema();
+        $aZAZ09OneOf1->oneOf[1] = HTTPSecurityScheme::schema();
+        $aZAZ09OneOf1->oneOf[2] = OAuth2SecurityScheme::schema();
+        $aZAZ09OneOf1->oneOf[3] = OpenIdConnectSecurityScheme::schema();
+        $aZAZ09OneOf1->setFromRef('#/definitions/SecurityScheme');
+        $aZAZ09->oneOf[1] = $aZAZ09OneOf1;
+        $properties->securitySchemes->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->links = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Link::schema();
-        $properties->links->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09->oneOf[1] = Link::schema();
+        $properties->links->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $properties->callbacks = Schema::object();
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Reference::schema();
-        $patternProperty->oneOf[1] = Callback::schema();
-        $properties->callbacks->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $patternProperty);
+        $aZAZ09 = new Schema();
+        $aZAZ09OneOf0 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $aZAZ09OneOf0->setPatternProperty('^\\$ref$', $ref);
+        $aZAZ09OneOf0->not = new Schema();
+        $aZAZ09OneOf0->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $aZAZ09OneOf0->required = array(
+            '$ref',
+        );
+        $aZAZ09OneOf0->setFromRef('#/definitions/Reference');
+        $aZAZ09->oneOf[0] = $aZAZ09OneOf0;
+        $aZAZ09OneOf1 = Schema::object();
+        $aZAZ09OneOf1->additionalProperties = PathItem::schema();
+        $x = new Schema();
+        $aZAZ09OneOf1->setPatternProperty('^x-', $x);
+        $aZAZ09OneOf1->setFromRef('#/definitions/Callback');
+        $aZAZ09->oneOf[1] = $aZAZ09OneOf1;
+        $properties->callbacks->setPatternProperty('^[a-zA-Z0-9\\.\\-_]+$', $aZAZ09);
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->setFromRef('#/definitions/Components');
     }
 
@@ -131,7 +232,7 @@ class Components extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string[][]|Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[] $parameters
+     * @param string[][]|Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[] $parameters
      * @return $this
      * @codeCoverageIgnoreStart
      */
@@ -179,7 +280,7 @@ class Components extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param string[][]|APIKeySecurityScheme[]|HTTPSecurityScheme[]|HTTPSecuritySchemeOneOf0[]|HTTPSecuritySchemeOneOf1[]|OAuth2SecurityScheme[]|OpenIdConnectSecurityScheme[] $securitySchemes
+     * @param string[][]|APIKeySecurityScheme[]|HTTPSecurityScheme[]|HTTPSecuritySchemeBearer[]|HTTPSecuritySchemeNonBearer[]|OAuth2SecurityScheme[]|OpenIdConnectSecurityScheme[] $securitySchemes
      * @return $this
      * @codeCoverageIgnoreStart
      */
