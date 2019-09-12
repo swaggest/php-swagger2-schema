@@ -48,7 +48,7 @@ class OpenAPI3Schema extends ClassStructure
     public $components;
 
     /**
-     * @param $data
+     * @param \stdClass $data
      * @param Context $options
      * @return static
      * @throws InvalidValue

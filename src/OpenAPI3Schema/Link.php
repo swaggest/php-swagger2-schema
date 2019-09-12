@@ -90,7 +90,7 @@ class Link extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param $parameters
+     * @param mixed $parameters
      * @return $this
      * @codeCoverageIgnoreStart
      */
