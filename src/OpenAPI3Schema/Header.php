@@ -81,7 +81,17 @@ class Header extends ClassStructure
         $properties->allowReserved->default = false;
         $properties->schema = new Schema();
         $properties->schema->oneOf[0] = DefinitionsSchema::schema();
-        $properties->schema->oneOf[1] = Reference::schema();
+        $propertiesSchemaOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesSchemaOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesSchemaOneOf1->not = new Schema();
+        $propertiesSchemaOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesSchemaOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesSchemaOneOf1->setFromRef('#/definitions/Reference');
+        $properties->schema->oneOf[1] = $propertiesSchemaOneOf1;
         $properties->content = Schema::object();
         $properties->content->additionalProperties = MediaType::schema();
         $properties->content->maxProperties = 1;
@@ -90,13 +100,80 @@ class Header extends ClassStructure
         $properties->examples = Schema::object();
         $properties->examples->additionalProperties = new Schema();
         $properties->examples->additionalProperties->oneOf[0] = Example::schema();
-        $properties->examples->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesExamplesAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesExamplesAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesExamplesAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesExamplesAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesExamplesAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesExamplesAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->examples->additionalProperties->oneOf[1] = $propertiesExamplesAdditionalPropertiesOneOf1;
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
-        $ownerSchema->allOf[0] = ExampleXORExamples::schema();
-        $ownerSchema->allOf[1] = SchemaXORContent::schema();
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
+        $ownerSchemaAllOf0 = new Schema();
+        $ownerSchemaAllOf0->not = new Schema();
+        $ownerSchemaAllOf0->not->required = array(
+            self::names()->example,
+            self::names()->examples,
+        );
+        $ownerSchemaAllOf0->description = "Example and examples are mutually exclusive";
+        $ownerSchemaAllOf0->setFromRef('#/definitions/ExampleXORExamples');
+        $ownerSchema->allOf[0] = $ownerSchemaAllOf0;
+        $ownerSchemaAllOf1 = new Schema();
+        $ownerSchemaAllOf1->not = new Schema();
+        $ownerSchemaAllOf1->not->required = array(
+            self::names()->schema,
+            self::names()->content,
+        );
+        $ownerSchemaAllOf1OneOf0 = new Schema();
+        $ownerSchemaAllOf1OneOf0->required = array(
+            self::names()->schema,
+        );
+        $ownerSchemaAllOf1->oneOf[0] = $ownerSchemaAllOf1OneOf0;
+        $ownerSchemaAllOf1OneOf1 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf0 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf0->not = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf0->not->required = array(
+            self::names()->style,
+        );
+        $ownerSchemaAllOf1OneOf1->allOf[0] = $ownerSchemaAllOf1OneOf1AllOf0;
+        $ownerSchemaAllOf1OneOf1AllOf1 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf1->not = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf1->not->required = array(
+            self::names()->explode,
+        );
+        $ownerSchemaAllOf1OneOf1->allOf[1] = $ownerSchemaAllOf1OneOf1AllOf1;
+        $ownerSchemaAllOf1OneOf1AllOf2 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf2->not = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf2->not->required = array(
+            self::names()->allowReserved,
+        );
+        $ownerSchemaAllOf1OneOf1->allOf[2] = $ownerSchemaAllOf1OneOf1AllOf2;
+        $ownerSchemaAllOf1OneOf1AllOf3 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf3->not = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf3->not->required = array(
+            self::names()->example,
+        );
+        $ownerSchemaAllOf1OneOf1->allOf[3] = $ownerSchemaAllOf1OneOf1AllOf3;
+        $ownerSchemaAllOf1OneOf1AllOf4 = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf4->not = new Schema();
+        $ownerSchemaAllOf1OneOf1AllOf4->not->required = array(
+            self::names()->examples,
+        );
+        $ownerSchemaAllOf1OneOf1->allOf[4] = $ownerSchemaAllOf1OneOf1AllOf4;
+        $ownerSchemaAllOf1OneOf1->description = "Some properties are not allowed if content is present";
+        $ownerSchemaAllOf1OneOf1->required = array(
+            self::names()->content,
+        );
+        $ownerSchemaAllOf1->oneOf[1] = $ownerSchemaAllOf1OneOf1;
+        $ownerSchemaAllOf1->description = "Schema and content are mutually exclusive, at least one is required";
+        $ownerSchemaAllOf1->setFromRef('#/definitions/SchemaXORContent');
+        $ownerSchema->allOf[1] = $ownerSchemaAllOf1;
         $ownerSchema->setFromRef('#/definitions/Header');
     }
 

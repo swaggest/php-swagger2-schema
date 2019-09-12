@@ -36,15 +36,35 @@ class Responses extends ClassStructure
     {
         $properties->default = new Schema();
         $properties->default->oneOf[0] = Response::schema();
-        $properties->default->oneOf[1] = Reference::schema();
+        $propertiesDefaultOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesDefaultOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesDefaultOneOf1->not = new Schema();
+        $propertiesDefaultOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesDefaultOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesDefaultOneOf1->setFromRef('#/definitions/Reference');
+        $properties->default->oneOf[1] = $propertiesDefaultOneOf1;
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $patternProperty->oneOf[0] = Response::schema();
-        $patternProperty->oneOf[1] = Reference::schema();
-        $ownerSchema->setPatternProperty('^[1-5](?:\\d{2}|XX)$', $patternProperty);
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $property15D2XX = new Schema();
+        $property15D2XX->oneOf[0] = Response::schema();
+        $property15D2XXOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $property15D2XXOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $property15D2XXOneOf1->not = new Schema();
+        $property15D2XXOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $property15D2XXOneOf1->required = array(
+            '$ref',
+        );
+        $property15D2XXOneOf1->setFromRef('#/definitions/Reference');
+        $property15D2XX->oneOf[1] = $property15D2XXOneOf1;
+        $ownerSchema->setPatternProperty('^[1-5](?:\\d{2}|XX)$', $property15D2XX);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->minProperties = 1;
         $ownerSchema->setFromRef('#/definitions/Responses');
     }
@@ -65,7 +85,7 @@ class Responses extends ClassStructure
      * @return Response[]|string[][]
      * @codeCoverageIgnoreStart
      */
-    public function getproperty15D2XXValues()
+    public function getProperty15D2XXValues()
     {
         $result = array();
         if (!$names = $this->getPatternPropertyNames(self::CONST_1_5_D_2_XX_PROPERTY_PATTERN)) {
@@ -85,7 +105,7 @@ class Responses extends ClassStructure
      * @throws InvalidValue
      * @codeCoverageIgnoreStart
      */
-    public function setproperty15D2XXValue($name, $value)
+    public function setProperty15D2XXValue($name, $value)
     {
         if (preg_match(Helper::toPregPattern(self::CONST_1_5_D_2_XX_PROPERTY_PATTERN), $name)) {
             throw new StringException('Pattern mismatch', StringException::PATTERN_MISMATCH);

@@ -44,7 +44,8 @@ $app->setNamespaceRoot($appNs, '.');
 $builder = new PhpBuilder();
 $builder->buildSetters = true;
 $builder->makeEnumConstants = true;
-$builder->minimizeRefs = false;
+$builder->minimizeRefs = true;
+$builder->namesFromDescriptions = true;
 
 $builder->classCreatedHook = new ClassHookCallback(function (PhpClass $class, $path, $schema) use ($app, $appNs) {
     $desc = '';
@@ -76,7 +77,7 @@ if ($options == null) {
 $options->dereference = true;
 return static::schema()->in($data, $options);
 PHP
-);
+        );
         $class->addMethod($import);
     } elseif ('#/definitions/' === substr($path, 0, strlen('#/definitions/'))) {
         $className = PhpCode::makePhpClassName(substr($path, strlen('#/definitions/')));

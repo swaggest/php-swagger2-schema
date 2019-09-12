@@ -14,7 +14,7 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 /**
  * Parameter in path
  */
-class ParameterLocationOneOf0 extends ClassStructure
+class ParameterLocationParameterInPath extends ClassStructure
 {
     const PATH = 'path';
 

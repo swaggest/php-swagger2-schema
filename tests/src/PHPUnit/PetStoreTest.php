@@ -2,7 +2,6 @@
 
 namespace Swaggest\SwaggerSchema\Tests\PHPUnit;
 
-use Swaggest\JsonSchema\Context;
 use Swaggest\OpenAPI3Schema\OpenAPI3Schema;
 use Swaggest\SwaggerSchema\SwaggerSchema;
 
@@ -38,7 +37,5 @@ class PetStoreTest extends \PHPUnit_Framework_TestCase
 
         $responseSchema = $ops['get']->responses[200]->content['application/json']->schema;
         $this->assertSame('array', $responseSchema->type);
-
     }
-
 }

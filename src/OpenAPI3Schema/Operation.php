@@ -36,7 +36,7 @@ class Operation extends ClassStructure
     /** @var string */
     public $operationId;
 
-    /** @var Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[]|string[][]|array */
+    /** @var Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[]|string[][]|array */
     public $parameters;
 
     /** @var RequestBody|string[] */
@@ -72,26 +72,64 @@ class Operation extends ClassStructure
         $properties->parameters = Schema::arr();
         $properties->parameters->items = new Schema();
         $properties->parameters->items->oneOf[0] = Parameter::schema();
-        $properties->parameters->items->oneOf[1] = Reference::schema();
+        $propertiesParametersItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesParametersItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesParametersItemsOneOf1->not = new Schema();
+        $propertiesParametersItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesParametersItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesParametersItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->parameters->items->oneOf[1] = $propertiesParametersItemsOneOf1;
         $properties->parameters->uniqueItems = true;
         $properties->requestBody = new Schema();
         $properties->requestBody->oneOf[0] = RequestBody::schema();
-        $properties->requestBody->oneOf[1] = Reference::schema();
+        $propertiesRequestBodyOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesRequestBodyOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesRequestBodyOneOf1->not = new Schema();
+        $propertiesRequestBodyOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesRequestBodyOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesRequestBodyOneOf1->setFromRef('#/definitions/Reference');
+        $properties->requestBody->oneOf[1] = $propertiesRequestBodyOneOf1;
         $properties->responses = Responses::schema();
         $properties->callbacks = Schema::object();
         $properties->callbacks->additionalProperties = new Schema();
-        $properties->callbacks->additionalProperties->oneOf[0] = Callback::schema();
-        $properties->callbacks->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesCallbacksAdditionalPropertiesOneOf0 = Schema::object();
+        $propertiesCallbacksAdditionalPropertiesOneOf0->additionalProperties = PathItem::schema();
+        $x = new Schema();
+        $propertiesCallbacksAdditionalPropertiesOneOf0->setPatternProperty('^x-', $x);
+        $propertiesCallbacksAdditionalPropertiesOneOf0->setFromRef('#/definitions/Callback');
+        $properties->callbacks->additionalProperties->oneOf[0] = $propertiesCallbacksAdditionalPropertiesOneOf0;
+        $propertiesCallbacksAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesCallbacksAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesCallbacksAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesCallbacksAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesCallbacksAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesCallbacksAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->callbacks->additionalProperties->oneOf[1] = $propertiesCallbacksAdditionalPropertiesOneOf1;
         $properties->deprecated = Schema::boolean();
         $properties->deprecated->default = false;
         $properties->security = Schema::arr();
-        $properties->security->items = SecurityRequirement::schema();
+        $properties->security->items = Schema::object();
+        $properties->security->items->additionalProperties = Schema::arr();
+        $properties->security->items->additionalProperties->items = Schema::string();
+        $properties->security->items->setFromRef('#/definitions/SecurityRequirement');
         $properties->servers = Schema::arr();
         $properties->servers->items = Server::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->required = array(
             self::names()->responses,
         );
@@ -159,7 +197,7 @@ class Operation extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[]|string[][]|array $parameters
+     * @param Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[]|string[][]|array $parameters
      * @return $this
      * @codeCoverageIgnoreStart
      */

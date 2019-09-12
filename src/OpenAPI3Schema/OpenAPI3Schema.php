@@ -48,7 +48,7 @@ class OpenAPI3Schema extends ClassStructure
     public $components;
 
     /**
-     * @param \stdClass $data
+     * @param $data
      * @param Context $options
      * @return static
      * @throws InvalidValue
@@ -76,16 +76,25 @@ class OpenAPI3Schema extends ClassStructure
         $properties->servers = Schema::arr();
         $properties->servers->items = Server::schema();
         $properties->security = Schema::arr();
-        $properties->security->items = SecurityRequirement::schema();
+        $properties->security->items = Schema::object();
+        $properties->security->items->additionalProperties = Schema::arr();
+        $properties->security->items->additionalProperties->items = Schema::string();
+        $properties->security->items->setFromRef('#/definitions/SecurityRequirement');
         $properties->tags = Schema::arr();
         $properties->tags->items = Tag::schema();
         $properties->tags->uniqueItems = true;
-        $properties->paths = Paths::schema();
+        $properties->paths = Schema::object();
+        $properties->paths->additionalProperties = false;
+        $property43d9b4 = PathItem::schema();
+        $properties->paths->setPatternProperty('^\\/', $property43d9b4);
+        $x = new Schema();
+        $properties->paths->setPatternProperty('^x-', $x);
+        $properties->paths->setFromRef('#/definitions/Paths');
         $properties->components = Components::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->id = "https://spec.openapis.org/oas/3.0/schema/2019-04-02";
         $ownerSchema->schema = "http://json-schema.org/draft-04/schema#";
         $ownerSchema->description = "Validation schema for OpenAPI Specification 3.0.X.";

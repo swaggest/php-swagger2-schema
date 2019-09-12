@@ -197,29 +197,99 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         );
         $properties->not = new Schema();
         $properties->not->oneOf[0] = DefinitionsSchema::schema();
-        $properties->not->oneOf[1] = Reference::schema();
+        $propertiesNotOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesNotOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesNotOneOf1->not = new Schema();
+        $propertiesNotOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesNotOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesNotOneOf1->setFromRef('#/definitions/Reference');
+        $properties->not->oneOf[1] = $propertiesNotOneOf1;
         $properties->allOf = Schema::arr();
         $properties->allOf->items = new Schema();
         $properties->allOf->items->oneOf[0] = DefinitionsSchema::schema();
-        $properties->allOf->items->oneOf[1] = Reference::schema();
+        $propertiesAllOfItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesAllOfItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesAllOfItemsOneOf1->not = new Schema();
+        $propertiesAllOfItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesAllOfItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesAllOfItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->allOf->items->oneOf[1] = $propertiesAllOfItemsOneOf1;
         $properties->oneOf = Schema::arr();
         $properties->oneOf->items = new Schema();
         $properties->oneOf->items->oneOf[0] = DefinitionsSchema::schema();
-        $properties->oneOf->items->oneOf[1] = Reference::schema();
+        $propertiesOneOfItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesOneOfItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesOneOfItemsOneOf1->not = new Schema();
+        $propertiesOneOfItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesOneOfItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesOneOfItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->oneOf->items->oneOf[1] = $propertiesOneOfItemsOneOf1;
         $properties->anyOf = Schema::arr();
         $properties->anyOf->items = new Schema();
         $properties->anyOf->items->oneOf[0] = DefinitionsSchema::schema();
-        $properties->anyOf->items->oneOf[1] = Reference::schema();
+        $propertiesAnyOfItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesAnyOfItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesAnyOfItemsOneOf1->not = new Schema();
+        $propertiesAnyOfItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesAnyOfItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesAnyOfItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->anyOf->items->oneOf[1] = $propertiesAnyOfItemsOneOf1;
         $properties->items = new Schema();
         $properties->items->oneOf[0] = DefinitionsSchema::schema();
-        $properties->items->oneOf[1] = Reference::schema();
+        $propertiesItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesItemsOneOf1->not = new Schema();
+        $propertiesItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->items->oneOf[1] = $propertiesItemsOneOf1;
         $properties->properties = Schema::object();
         $properties->properties->additionalProperties = new Schema();
         $properties->properties->additionalProperties->oneOf[0] = DefinitionsSchema::schema();
-        $properties->properties->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesPropertiesAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesPropertiesAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesPropertiesAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesPropertiesAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesPropertiesAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesPropertiesAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->properties->additionalProperties->oneOf[1] = $propertiesPropertiesAdditionalPropertiesOneOf1;
         $properties->additionalProperties = new Schema();
         $properties->additionalProperties->oneOf[0] = DefinitionsSchema::schema();
-        $properties->additionalProperties->oneOf[1] = Reference::schema();
+        $propertiesAdditionalPropertiesOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesAdditionalPropertiesOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesAdditionalPropertiesOneOf1->not = new Schema();
+        $propertiesAdditionalPropertiesOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesAdditionalPropertiesOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesAdditionalPropertiesOneOf1->setFromRef('#/definitions/Reference');
+        $properties->additionalProperties->oneOf[1] = $propertiesAdditionalPropertiesOneOf1;
         $properties->additionalProperties->oneOf[2] = Schema::boolean();
         $properties->additionalProperties->default = true;
         $properties->description = Schema::string();
@@ -239,8 +309,8 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         $properties->xml = XML::schema();
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->setFromRef('#/definitions/Schema');
     }
 

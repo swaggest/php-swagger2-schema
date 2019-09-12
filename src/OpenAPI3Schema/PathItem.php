@@ -35,7 +35,7 @@ class PathItem extends ClassStructure
     /** @var Server[]|array */
     public $servers;
 
-    /** @var Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[]|string[][]|array */
+    /** @var Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[]|string[][]|array */
     public $parameters;
 
     /**
@@ -53,14 +53,24 @@ class PathItem extends ClassStructure
         $properties->parameters = Schema::arr();
         $properties->parameters->items = new Schema();
         $properties->parameters->items->oneOf[0] = Parameter::schema();
-        $properties->parameters->items->oneOf[1] = Reference::schema();
+        $propertiesParametersItemsOneOf1 = Schema::object();
+        $ref = Schema::string();
+        $ref->format = "uri-reference";
+        $propertiesParametersItemsOneOf1->setPatternProperty('^\\$ref$', $ref);
+        $propertiesParametersItemsOneOf1->not = new Schema();
+        $propertiesParametersItemsOneOf1->not->description = "This schema always fails to disable oneOf references in favor of sibling schema";
+        $propertiesParametersItemsOneOf1->required = array(
+            '$ref',
+        );
+        $propertiesParametersItemsOneOf1->setFromRef('#/definitions/Reference');
+        $properties->parameters->items->oneOf[1] = $propertiesParametersItemsOneOf1;
         $properties->parameters->uniqueItems = true;
         $ownerSchema->type = 'object';
         $ownerSchema->additionalProperties = false;
-        $patternProperty = Operation::schema();
-        $ownerSchema->setPatternProperty('^(get|put|post|delete|options|head|patch|trace)$', $patternProperty);
-        $patternProperty = new Schema();
-        $ownerSchema->setPatternProperty('^x-', $patternProperty);
+        $getPutPostDeleteOptionsHeadPatchTrace = Operation::schema();
+        $ownerSchema->setPatternProperty('^(get|put|post|delete|options|head|patch|trace)$', $getPutPostDeleteOptionsHeadPatchTrace);
+        $x = new Schema();
+        $ownerSchema->setPatternProperty('^x-', $x);
         $ownerSchema->setFromRef('#/definitions/PathItem');
     }
 
@@ -113,7 +123,7 @@ class PathItem extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
-     * @param Parameter[]|mixed[]|ParameterLocationOneOf0[]|ParameterLocationOneOf1[]|ParameterLocationOneOf2[]|ParameterLocationOneOf3[]|string[][]|array $parameters
+     * @param Parameter[]|mixed[]|ParameterLocationParameterInPath[]|ParameterLocationParameterInQuery[]|ParameterLocationParameterInHeader[]|ParameterLocationParameterInCookie[]|string[][]|array $parameters
      * @return $this
      * @codeCoverageIgnoreStart
      */

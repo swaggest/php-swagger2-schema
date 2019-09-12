@@ -12,19 +12,13 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 
 /**
- * Parameter in query
+ * Parameter in cookie
  */
-class ParameterLocationOneOf1 extends ClassStructure
+class ParameterLocationParameterInCookie extends ClassStructure
 {
-    const QUERY = 'query';
+    const COOKIE = 'cookie';
 
     const FORM = 'form';
-
-    const SPACE_DELIMITED = 'spaceDelimited';
-
-    const PIPE_DELIMITED = 'pipeDelimited';
-
-    const DEEP_OBJECT = 'deepObject';
 
     /** @var mixed */
     public $in;
@@ -40,17 +34,14 @@ class ParameterLocationOneOf1 extends ClassStructure
     {
         $properties->in = new Schema();
         $properties->in->enum = array(
-            self::QUERY,
+            self::COOKIE,
         );
         $properties->style = new Schema();
         $properties->style->enum = array(
             self::FORM,
-            self::SPACE_DELIMITED,
-            self::PIPE_DELIMITED,
-            self::DEEP_OBJECT,
         );
         $properties->style->default = "form";
-        $ownerSchema->description = "Parameter in query";
+        $ownerSchema->description = "Parameter in cookie";
     }
 
     /**
