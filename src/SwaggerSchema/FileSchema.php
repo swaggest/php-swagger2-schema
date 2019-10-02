@@ -206,6 +206,7 @@ class FileSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * @return array
      * @codeCoverageIgnoreStart
      */
     public function getXValues()
@@ -259,7 +260,11 @@ class FileSchema extends ClassStructure implements SchemaExporter
         $schema->description = $this->description;
         $schema->default = $this->default;
         $schema->required = $this->required;
-        $schema->type = $this->type;
+        if (!empty($this->{'x-nullable'}) && $this->type) {
+            $schema->type = [Schema::NULL, $this->type];
+        } else {
+            $schema->type = $this->type;
+        }
         $schema->__fromRef = $this->__fromRef;
         $schema->setDocumentPath($this->getDocumentPath());
         $schema->addMeta($this, 'origin');

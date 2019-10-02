@@ -48,7 +48,7 @@ class OpenAPI3Schema extends ClassStructure
     public $components;
 
     /**
-     * @param \stdClass $data
+     * @param mixed $data
      * @param Context $options
      * @return static
      * @throws InvalidValue
@@ -202,6 +202,7 @@ class OpenAPI3Schema extends ClassStructure
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * @return array
      * @codeCoverageIgnoreStart
      */
     public function getXValues()
