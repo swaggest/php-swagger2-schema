@@ -735,6 +735,7 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * @return array
      * @codeCoverageIgnoreStart
      */
     public function getXValues()
@@ -799,7 +800,11 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         $schema->minProperties = $this->minProperties;
         $schema->required = $this->required;
         $schema->enum = $this->enum;
-        $schema->type = $this->type;
+        if ($this->nullable && $this->type) {
+            $schema->type = [Schema::NULL, $this->type];
+        } else {
+            $schema->type = $this->type;
+        }
         if (!empty($this->allOf)) {
             foreach ($this->allOf as $i => $item) {
                 if ($item instanceof SchemaExporter) {

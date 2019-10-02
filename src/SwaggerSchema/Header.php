@@ -405,6 +405,7 @@ class Header extends ClassStructure implements SchemaExporter
     /** @codeCoverageIgnoreEnd */
 
     /**
+     * @return array
      * @codeCoverageIgnoreStart
      */
     public function getXValues()
@@ -453,7 +454,11 @@ class Header extends ClassStructure implements SchemaExporter
             $schema = new Schema();
             self::$schemaStorage->attach($this, $schema);
         }
-        $schema->type = $this->type;
+        if (!empty($this->{'x-nullable'}) && $this->type) {
+            $schema->type = [Schema::NULL, $this->type];
+        } else {
+            $schema->type = $this->type;
+        }
         $schema->format = $this->format;
         if ($this->items !== null && $this->items instanceof SchemaExporter) {
             $schema->items = $this->items->exportSchema();
