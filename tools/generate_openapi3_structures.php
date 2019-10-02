@@ -24,6 +24,23 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../../../../vendor/autoload.php';
 }
 
+class OpenAPISchemaExporterInterface extends SchemaExporterInterface {
+    protected function buildDefault($name)
+    {
+        if ($name === Schema::names()->type) {
+            return <<<'PHP'
+if ($this->nullable && $this->type) {
+    $schema->type = [Schema::NULL, $this->type];
+} else {
+    $schema->type = $this->type;
+}
+
+PHP;
+        }
+        return parent::buildDefault($name);
+    }
+}
+
 $schemaData = json_decode(file_get_contents(__DIR__ . '/../spec/openapi3-schema.json'));
 
 $refProvider = new Preloaded();
@@ -89,7 +106,7 @@ PHP
     $app->addClass($class);
 });
 
-$builder->classPreparedHook = new SchemaExporterInterface();
+$builder->classPreparedHook = new OpenAPISchemaExporterInterface();
 
 $builder->getType($openapi3Schema);
 $app->clearOldFiles($appPath);
