@@ -714,6 +714,9 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         } else {
             $schema->type = $this->type;
         }
+        foreach ($this->getXValues() as $key => $value) {
+            $schema->$key = $value;
+        }
         if ($this->items !== null && $this->items instanceof SchemaExporter) {
             $schema->items = $this->items->exportSchema();
         }
