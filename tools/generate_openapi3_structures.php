@@ -34,6 +34,9 @@ if ($this->nullable && $this->type) {
 } else {
     $schema->type = $this->type;
 }
+foreach ($this->getXValues() as $key => $value) {
+    $schema->$key = $value;
+}
 
 PHP;
         }

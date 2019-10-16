@@ -514,6 +514,9 @@ class HeaderParameterSubSchema extends ClassStructure implements SchemaExporter
         } else {
             $schema->type = $this->type;
         }
+        foreach ($this->getXValues() as $key => $value) {
+            $schema->$key = $value;
+        }
         $schema->format = $this->format;
         if ($this->items !== null && $this->items instanceof SchemaExporter) {
             $schema->items = $this->items->exportSchema();

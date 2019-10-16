@@ -265,6 +265,9 @@ class FileSchema extends ClassStructure implements SchemaExporter
         } else {
             $schema->type = $this->type;
         }
+        foreach ($this->getXValues() as $key => $value) {
+            $schema->$key = $value;
+        }
         $schema->__fromRef = $this->__fromRef;
         $schema->setDocumentPath($this->getDocumentPath());
         $schema->addMeta($this, 'origin');
