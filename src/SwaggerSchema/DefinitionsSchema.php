@@ -19,6 +19,8 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 /**
  * A deterministic version of a JSON Schema object.
  * Built from #/definitions/schema
+ *
+ * @property mixed $default
  */
 class DefinitionsSchema extends ClassStructure implements SchemaExporter
 {
@@ -49,9 +51,6 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
 
     /** @var string */
     public $description;
-
-    /** @var mixed */
-    public $default;
 
     /** @var float */
     public $multipleOf;
@@ -690,7 +689,9 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         $schema->format = $this->format;
         $schema->title = $this->title;
         $schema->description = $this->description;
-        $schema->default = $this->default;
+        if (array_key_exists(Schema::DEFAULT_PROPERTY, $this->__arrayOfData)) {
+            $schema->default = $this->default;
+        }
         $schema->multipleOf = $this->multipleOf;
         $schema->maximum = $this->maximum;
         $schema->exclusiveMaximum = $this->exclusiveMaximum;

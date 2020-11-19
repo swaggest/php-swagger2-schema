@@ -18,6 +18,8 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 /**
  * Built from #/definitions/Schema
+ *
+ * @property mixed $default
  */
 class DefinitionsSchema extends ClassStructure implements SchemaExporter
 {
@@ -112,9 +114,6 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
 
     /** @var string */
     public $format;
-
-    /** @var mixed */
-    public $default;
 
     /** @var bool */
     public $nullable;
@@ -844,7 +843,9 @@ class DefinitionsSchema extends ClassStructure implements SchemaExporter
         }
         $schema->description = $this->description;
         $schema->format = $this->format;
-        $schema->default = $this->default;
+        if (array_key_exists(Schema::DEFAULT_PROPERTY, $this->__arrayOfData)) {
+            $schema->default = $this->default;
+        }
         $schema->__fromRef = $this->__fromRef;
         $schema->setDocumentPath($this->getDocumentPath());
         $schema->addMeta($this, 'origin');
