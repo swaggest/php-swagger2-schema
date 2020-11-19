@@ -18,6 +18,8 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 
 /**
  * Built from #/definitions/queryParameterSubSchema
+ *
+ * @property mixed $default
  */
 class QueryParameterSubSchema extends ClassStructure implements SchemaExporter
 {
@@ -71,9 +73,6 @@ class QueryParameterSubSchema extends ClassStructure implements SchemaExporter
 
     /** @var string */
     public $collectionFormat;
-
-    /** @var mixed */
-    public $default;
 
     /** @var float */
     public $maximum;
@@ -542,7 +541,9 @@ class QueryParameterSubSchema extends ClassStructure implements SchemaExporter
         if ($this->items !== null && $this->items instanceof SchemaExporter) {
             $schema->items = $this->items->exportSchema();
         }
-        $schema->default = $this->default;
+        if (array_key_exists(Schema::DEFAULT_PROPERTY, $this->__arrayOfData)) {
+            $schema->default = $this->default;
+        }
         $schema->maximum = $this->maximum;
         $schema->exclusiveMaximum = $this->exclusiveMaximum;
         $schema->minimum = $this->minimum;

@@ -19,6 +19,8 @@ use Swaggest\JsonSchema\Structure\ClassStructure;
 /**
  * A deterministic version of a JSON Schema object.
  * Built from #/definitions/fileSchema
+ *
+ * @property mixed $default
  */
 class FileSchema extends ClassStructure implements SchemaExporter
 {
@@ -34,9 +36,6 @@ class FileSchema extends ClassStructure implements SchemaExporter
 
     /** @var string */
     public $description;
-
-    /** @var mixed */
-    public $default;
 
     /** @var string[]|array */
     public $required;
@@ -258,7 +257,9 @@ class FileSchema extends ClassStructure implements SchemaExporter
         $schema->format = $this->format;
         $schema->title = $this->title;
         $schema->description = $this->description;
-        $schema->default = $this->default;
+        if (array_key_exists(Schema::DEFAULT_PROPERTY, $this->__arrayOfData)) {
+            $schema->default = $this->default;
+        }
         $schema->required = $this->required;
         if (!empty($this->{'x-nullable'}) && $this->type) {
             $schema->type = [Schema::NULL, $this->type];
