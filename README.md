@@ -1,8 +1,6 @@
 # OpenAPI 3.0 and Swagger 2.0 schema PHP mappings
 
 [![Build Status](https://travis-ci.org/swaggest/php-swagger2-schema.svg?branch=master)](https://travis-ci.org/swaggest/php-swagger2-schema)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/swaggest/php-swagger2-schema/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/swaggest/php-swagger2-schema/?branch=master)
-[![Code Climate](https://codeclimate.com/github/swaggest/php-swagger2-schema/badges/gpa.svg)](https://codeclimate.com/github/swaggest/php-swagger2-schema)
 [![codecov](https://codecov.io/gh/swaggest/php-swagger2-schema/branch/master/graph/badge.svg)](https://codecov.io/gh/swaggest/php-swagger2-schema)
 
 Access and validate `OpenAPI 3.0` and `Swagger 2.0` schemas from PHP.
