@@ -2,6 +2,7 @@
 
 namespace Swaggest\SwaggerSchema\Tests\PHPUnit;
 
+use Swaggest\JsonSchema\InvalidRef;
 use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\OpenAPI3Schema\OpenAPI3Schema;
 use Swaggest\SwaggerSchema\SwaggerSchema;
@@ -77,6 +78,72 @@ class PetStoreTest extends \PHPUnit_Framework_TestCase
  } at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema
  1: Required property missing: $ref, data: {"description":"pet response","schema":{"type":"array","items":{"$ref":"#/definitions/Foo"}}} at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[1]->$ref[#/definitions/jsonReference]
 } at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]',
+                $exception->getMessage());
+        }
+
+        $this->assertTrue($failed);
+    }
+
+    public function testInvalid2()
+    {
+        $json = <<<'JSON'
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "test",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/test": {
+            "get": {
+                "summary": "test",
+                "responses": {
+                    "200": {
+                        "description": "successful response",
+                        "schema": {
+                            "$ref": "#/definitions/response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response": {
+            "properties": {
+                "foo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/good"
+                    }
+                },
+                "bar": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/missing1"
+                    }
+                }
+            }
+        },
+        "good": {
+            "properties": {
+                "foo": {
+                    "$ref": "#/definitions/missing2"
+                }
+            }
+        }
+    }
+}
+
+JSON;
+
+
+        $failed = false;
+        try {
+            $schema = SwaggerSchema::import(json_decode($json));
+        } catch (InvalidRef $exception) {
+            $failed = true;
+            $this->assertEquals('Could not resolve #/definitions/missing2@: missing2',
                 $exception->getMessage());
         }
 
