@@ -3,7 +3,7 @@
   "description": "Swagger 2.0 schema PHP mappings",
   "type": "library",
   "require": {
-    "swaggest/json-schema": "^0.12.31",
+    "swaggest/json-schema": "^0.12.34",
     "ext-json": "*"
   },
   "require-dev": {
