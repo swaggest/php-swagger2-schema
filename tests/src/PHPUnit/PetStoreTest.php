@@ -65,19 +65,10 @@ class PetStoreTest extends \PHPUnit_Framework_TestCase
         try {
             // Import and validate
             $schema = SwaggerSchema::import($json);
-        } catch (InvalidValue $exception) {
+        } catch (InvalidRef $exception) {
             $failed = true;
 
-            $this->assertEquals('No valid results for oneOf {
- 0: No valid results for oneOf {
-  0: No valid results for anyOf {
-    0: Could not resolve #/definitions/Foo@: Foo at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema->oneOf[0]->$ref[#/definitions/schema]->properties:items->anyOf[0]->$ref[#/definitions/schema]
-    1: Array expected, {"$ref":"#\/definitions\/Foo"} received at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema->oneOf[0]->$ref[#/definitions/schema]->properties:items->anyOf[1]
-  } at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema->oneOf[0]->$ref[#/definitions/schema]->properties:items
-  1: Enum failed, enum: ["file"], data: "array" at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema->oneOf[1]->$ref[#/definitions/fileSchema]->properties:type
- } at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[0]->$ref[#/definitions/response]->properties:schema
- 1: Required property missing: $ref, data: {"description":"pet response","schema":{"type":"array","items":{"$ref":"#/definitions/Foo"}}} at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]->oneOf[1]->$ref[#/definitions/jsonReference]
-} at #->$ref[#/definitions/Swaggest\SwaggerSchema\SwaggerSchema]->properties:paths->$ref[#/definitions/paths]->patternProperties[^/]:/pets->$ref[#/definitions/pathItem]->properties:get->$ref[#/definitions/operation]->properties:responses->$ref[#/definitions/responses]->patternProperties[^([0-9]{3})$|^(default)$]:200->$ref[#/definitions/responseValue]',
+            $this->assertEquals('Could not resolve #/definitions/Foo@: Foo',
                 $exception->getMessage());
         }
 
